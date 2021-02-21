@@ -1,0 +1,35 @@
+{
+  "name": "washere-backend",
+  "version": "1.0.0",
+  "description": "This is a Node.js application that provides a backend for WasHere application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aldin-alagic/washere-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aldin-alagic/washere-backend/issues"
+  },
+  "homepage": "https://github.com/aldin-alagic/washere-backend#readme",
+  "devDependencies": {
+    "eslint": "^7.20.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "socket.io": "^3.1.1",
+    "swagger-jsdoc": "^7.0.0-rc.2",
+    "swagger-ui-express": "^4.1.6"
+  }
+}
