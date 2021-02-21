@@ -18,7 +18,7 @@ npm install
 
 to install all the required dependencies for the project.
 
-Rename `example.env` to `.env` and fill out the server `PORT` parameter to a value of your choosing, for example: `3001`. After that, simply run
+Rename `example.env` to `.env` and fill out the server `PORT` parameter to a value of your choosing, for example: `3001`.
 
 # How to run it (locally)
 
