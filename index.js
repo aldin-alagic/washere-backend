@@ -1,10 +1,11 @@
 require("dotenv").config();
-
 const express = require("express");
+const routes = require("./routes/");
+
 const app = express();
+
+app.use("/api", routes);
 
 // Configure Swagger -- to do
 
-const server = app.listen(process.env.PORT || 8080, () =>
-  console.log(`Server started on port ${process.env.PORT}`)
-);
+app.listen(process.env.PORT || 8080, () => console.log(`Server started!`));

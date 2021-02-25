@@ -1,0 +1,141 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model achievement {
+  id               Int                @id @default(autoincrement())
+  name             String             @unique @db.VarChar(255)
+  description      String             @unique @db.VarChar(255)
+  image            String             @unique @db.VarChar(255)
+  user_achievement user_achievement[]
+}
+
+model code {
+  code_type_id Int
+  user_id      Int
+  value        String?   @db.Char(64)
+  code_type    code_type @relation(fields: [code_type_id], references: [id])
+  user         user      @relation(fields: [user_id], references: [id])
+
+  @@id([code_type_id, user_id])
+  @@index([user_id], name: "code_user_id_fk")
+}
+
+model code_type {
+  id   Int    @id @default(autoincrement())
+  name String @unique @db.VarChar(255)
+  code code[]
+}
+
+model friendship {
+  friend1_id                       Int
+  friend2_id                       Int
+  approved                         Boolean
+  created_at                       DateTime  @default(now()) @db.Timestamp(0)
+  approved_at                      DateTime? @db.Timestamp(0)
+  user_friendship_friend1_idTouser user      @relation("friendship_friend1_idTouser", fields: [friend1_id], references: [id])
+  user_friendship_friend2_idTouser user      @relation("friendship_friend2_idTouser", fields: [friend2_id], references: [id])
+
+  @@id([friend1_id, friend2_id])
+  @@index([friend2_id], name: "friendship_user_id_fk_2")
+}
+
+model like {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  post_id    Int?
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  post       post?    @relation(fields: [post_id], references: [id])
+  user       user     @relation(fields: [user_id], references: [id])
+
+  @@unique([user_id, post_id], name: "like_user_id_post_id_uindex")
+  @@index([post_id], name: "like_post_id_fk")
+}
+
+model post {
+  id          Int       @id @default(autoincrement())
+  user_id     Int
+  description String?   @db.Text
+  public      Boolean?
+  latitude    Decimal?  @db.Decimal(11, 7)
+  longitude   Decimal?  @db.Decimal(11, 7)
+  views       Int?
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  user        user      @relation(fields: [user_id], references: [id])
+  like        like[]
+
+  @@index([user_id], name: "post_user_id_fk")
+}
+
+model role {
+  id   Int    @id @default(autoincrement())
+  name String @unique @db.VarChar(255)
+  user user[]
+}
+
+model statistics {
+  id        Int  @id @default(autoincrement())
+  user_id   Int
+  locations Int
+  posts     Int
+  friends   Int
+  user      user @relation(fields: [user_id], references: [id])
+
+  @@index([user_id], name: "statistics_user_id_fk")
+}
+
+model transaction {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  amount     Decimal  @db.Decimal(5, 2)
+  month      DateTime @db.Date
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  user       user     @relation(fields: [user_id], references: [id])
+
+  @@index([user_id], name: "transaction_user_id_fk")
+}
+
+model user {
+  id                                     Int                @id @default(autoincrement())
+  role_id                                Int
+  premium                                Boolean?           @default(false)
+  email                                  String             @unique @db.VarChar(255)
+  username                               String?            @unique @db.VarChar(255)
+  firstname                              String             @db.VarChar(255)
+  lastname                               String             @db.VarChar(255)
+  password                               String             @db.Char(60)
+  about                                  String?            @db.Text
+  activated                              Boolean?           @default(false)
+  deleted                                Int?               @default(0) @db.TinyInt
+  newsletter                             Boolean
+  login_attempts                         Int?               @db.TinyInt
+  last_login_at                          DateTime?          @db.Timestamp(0)
+  created_at                             DateTime?          @default(now()) @db.Timestamp(0)
+  role                                   role               @relation(fields: [role_id], references: [id])
+  code                                   code[]
+  friendship_friendship_friend1_idTouser friendship[]       @relation("friendship_friend1_idTouser")
+  friendship_friendship_friend2_idTouser friendship[]       @relation("friendship_friend2_idTouser")
+  like                                   like[]
+  post                                   post[]
+  statistics                             statistics[]
+  transaction                            transaction[]
+  user_achievement                       user_achievement[]
+
+  @@index([role_id], name: "user_role_id_fk")
+}
+
+model user_achievement {
+  user_id        Int
+  achievement_id Int
+  created_at     DateTime?   @default(now()) @db.Timestamp(0)
+  achievement    achievement @relation(fields: [achievement_id], references: [id])
+  user           user        @relation(fields: [user_id], references: [id])
+
+  @@id([user_id, achievement_id])
+  @@index([achievement_id], name: "user_achievement_achievement_id_fk")
+}
