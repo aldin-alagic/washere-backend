@@ -25,7 +25,6 @@ jobs:
           script: |
             cd /home/washere/
             npm ci
-            npm run build
       - name: Start the application
         uses: appleboy/ssh-action@v0.1.4
         with:
