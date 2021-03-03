@@ -1,8 +1,56 @@
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 
-const userController = require("../controllers/user");
+import { getAll, create } from "../controllers/user.js";
 
-router.post("/", userController.create);
+/**
+ * @swagger
+ * /:
+ *  get:
+ *    tags:
+ *    - "/user/"
+ *    summary: Get all users
+ *    responses:
+ *      '200':
+ *        description: All
+ *      '400':
+ *        description: An unsuccessful response
+ */
 
-module.exports = router;
+router.get("/", getAll);
+
+/**
+ * @swagger
+ * /register:
+ *  post:
+ *    tags:
+ *    - "/user/"
+ *    summary: Register a new user
+ *    parameters:
+ *    - name: "body"
+ *      in: "body"
+ *      description: "User's information"
+ *      schema:
+ *        type: "object"
+ *        properties:
+ *          firstname:
+ *            type: "string"
+ *          lastname:
+ *            type: "string"
+ *          email:
+ *            type: "string"
+ *          password:
+ *            type: "string"
+ *          newsletter:
+ *            type: number
+ *            enum: [0, 1]
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: An unsuccesful response
+ */
+
+router.post("/", create);
+
+export default router;
