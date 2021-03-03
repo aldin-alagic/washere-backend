@@ -32,6 +32,7 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 if (process.env.NODE_ENV !== "production")
   app.use("/api-docs", serve, setup(swaggerDocs));
 
+app.use(express.json());
 app.use("/api", routes);
 
 app.listen(process.env.PORT || 8080, () => console.log(`Server started!`));

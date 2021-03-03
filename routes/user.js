@@ -37,13 +37,14 @@ router.get("/", getAll);
  *            type: "string"
  *          lastname:
  *            type: "string"
+ *          username:
+ *            type: "string"
  *          email:
  *            type: "string"
  *          password:
  *            type: "string"
  *          newsletter:
- *            type: number
- *            enum: [0, 1]
+ *            type: boolean
  *    responses:
  *      '200':
  *        description: A successful response
