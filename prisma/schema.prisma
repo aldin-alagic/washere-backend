@@ -1,10 +1,10 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model achievement {
@@ -32,6 +32,19 @@ model code_type {
   code code[]
 }
 
+model comment {
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  post_id    Int
+  text       String    @db.Text
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  post       post      @relation(fields: [post_id], references: [id])
+  user       user      @relation(fields: [user_id], references: [id])
+
+  @@index([post_id], name: "comment_post_id_fk")
+  @@index([user_id], name: "comment_user_id_fk")
+}
+
 model friendship {
   friend1_id                       Int
   friend2_id                       Int
@@ -46,15 +59,15 @@ model friendship {
 }
 
 model like {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   user_id    Int
-  post_id    Int?
-  created_at DateTime @default(now()) @db.Timestamp(0)
-  post       post?    @relation(fields: [post_id], references: [id])
-  user       user     @relation(fields: [user_id], references: [id])
+  post_id    Int
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  post       post      @relation(fields: [post_id], references: [id])
+  user       user      @relation(fields: [user_id], references: [id])
 
-  @@unique([user_id, post_id], name: "like_user_id_post_id_uindex")
   @@index([post_id], name: "like_post_id_fk")
+  @@index([user_id], name: "like_user_id_fk")
 }
 
 model post {
@@ -67,6 +80,7 @@ model post {
   views       Int?
   created_at  DateTime? @default(now()) @db.Timestamp(0)
   user        user      @relation(fields: [user_id], references: [id])
+  comment     comment[]
   like        like[]
 
   @@index([user_id], name: "post_user_id_fk")
@@ -78,7 +92,7 @@ model role {
   user user[]
 }
 
-model statistics {
+model statistic {
   id        Int  @id @default(autoincrement())
   user_id   Int
   locations Int
@@ -106,8 +120,7 @@ model user {
   premium                                Boolean?           @default(false)
   email                                  String             @unique @db.VarChar(255)
   username                               String?            @unique @db.VarChar(255)
-  firstname                              String             @db.VarChar(255)
-  lastname                               String             @db.VarChar(255)
+  fullname                               String             @db.VarChar(255)
   password                               String             @db.Char(60)
   about                                  String?            @db.Text
   activated                              Boolean?           @default(false)
@@ -118,11 +131,12 @@ model user {
   created_at                             DateTime?          @default(now()) @db.Timestamp(0)
   role                                   role               @relation(fields: [role_id], references: [id])
   code                                   code[]
+  comment                                comment[]
   friendship_friendship_friend1_idTouser friendship[]       @relation("friendship_friend1_idTouser")
   friendship_friendship_friend2_idTouser friendship[]       @relation("friendship_friend2_idTouser")
   like                                   like[]
   post                                   post[]
-  statistics                             statistics[]
+  statistic                              statistic[]
   transaction                            transaction[]
   user_achievement                       user_achievement[]
 
