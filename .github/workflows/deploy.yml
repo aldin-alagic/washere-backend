@@ -1,38 +1,18 @@
-name: Deploy application
+name: Deploy
 on:
   push:
-    branches: [main]
+    branches:
+      - master
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch updated code
-        uses: appleboy/ssh-action@v0.1.4
+      - name: Cloning repo
+        uses: actions/checkout@v2
         with:
-          host: ${{secrets.SSH_HOST}}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          script: |
-            cd /home/washere/
-            git checkout main
-            git pull
-      - name: Build the application
-        uses: appleboy/ssh-action@v0.1.4
+          fetch-depth: 0
+      - name: Push to dokku
+        uses: dokku/github-action@master
         with:
-          host: ${{secrets.SSH_HOST}}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          script: |
-            cd /home/washere/
-            npm ci
-      - name: Start the application
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          host: ${{secrets.SSH_HOST}}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          script: |
-            cd /home/washere/
-            pm2 stop all
-            pm2 delete all
-            pm2 start npm --name "washere" -- start
+          git_remote_url: ${{ secrets.GIT_REMOTE_URL }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
