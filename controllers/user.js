@@ -4,17 +4,15 @@ import prisma from "../prisma/client.js";
 
 const getAll = async (req, res) => {
   try {
-    console.log("users");
     const users = await prisma.user.findMany();
     res.status(200).json({ success: true, data: users });
   } catch (error) {
-    res.status(400).json({ success: false, error });
+    res.status(400).json({ success: false, message: error });
   }
 };
 
 const register = async (req, res) => {
   try {
-    console.log("tu", req.body);
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     await prisma.user.create({
@@ -25,7 +23,7 @@ const register = async (req, res) => {
     });
     res.status(200).json({ success: true });
   } catch (error) {
-    res.status(400).json({ success: false, error });
+    res.status(400).json({ success: false, message: error });
   }
 };
 
@@ -49,24 +47,19 @@ const login = async (req, res) => {
         username: user.username,
         fullname: user.fullname,
         premium: user.premium,
-        newsletter: user.newsletter,
       },
       process.env.JWT_SECRET
     );
 
     res.status(200).json({
       success: true,
-      user: {
+      data: {
         token,
-        email: user.email,
-        username: user.username,
-        fullname: user.fullname,
-        premium: user.premium,
-        newsletter: user.newsletter,
       },
+      message: "You have been successfully logged in!",
     });
   } catch (error) {
-    res.status(400).json({ success: false, error });
+    res.status(400).json({ success: false, message: error });
   }
 };
 

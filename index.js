@@ -29,8 +29,7 @@ const swaggerOptions = {
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-if (process.env.NODE_ENV !== "production")
-  app.use("/api-docs", serve, setup(swaggerDocs));
+if (process.env.NODE_ENV !== "production") app.use("/api-docs", serve, setup(swaggerDocs));
 
 app.use(express.json());
 app.use("/api", routes);

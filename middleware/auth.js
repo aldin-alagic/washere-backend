@@ -10,7 +10,8 @@ const auth = (req, res, next) => {
     next();
   } catch {
     res.status(400).json({
-      error: "Authentication failure!",
+      success: false,
+      message: "Authentication failure!",
     });
   }
 };
