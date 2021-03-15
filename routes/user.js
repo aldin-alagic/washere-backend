@@ -53,8 +53,25 @@ router.get("/", auth, getAll);
  *    responses:
  *      '200':
  *        description: A successful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: true
+ *            message:
+ *              type: string
+ *              default: You have been successfully registered!
  *      '400':
  *        description: An unsuccesful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
  */
 
 router.post("/", register);
@@ -80,8 +97,28 @@ router.post("/", register);
  *    responses:
  *      '200':
  *        description: A successful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: true
+ *            token:
+ *              type: string
+ *            message:
+ *              type: string
+ *              default: You have been successfully logged in!
+ *
  *      '400':
  *        description: An unsuccesful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
  */
 
 router.post("/login", login);
