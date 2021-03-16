@@ -26,7 +26,7 @@ router.get("/", auth, getAll);
 
 /**
  * @swagger
- * /:
+ * /user/:
  *  post:
  *    tags:
  *    - "/user/"
@@ -78,7 +78,7 @@ router.post("/", register);
 
 /**
  * @swagger
- * /login:
+ * /user/login:
  *  post:
  *    tags:
  *    - "/user/"
