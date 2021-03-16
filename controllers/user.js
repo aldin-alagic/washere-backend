@@ -2,15 +2,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../prisma/client.js";
 
-const getAll = async (req, res) => {
-  try {
-    const users = await prisma.user.findMany();
-    res.status(200).json({ success: true, data: users });
-  } catch (error) {
-    res.status(400).json({ success: false, message: error });
-  }
-};
-
 const register = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -63,4 +54,4 @@ const login = async (req, res) => {
   }
 };
 
-export { getAll, register, login };
+export { register, login };

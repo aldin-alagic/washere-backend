@@ -1,28 +1,7 @@
 import { Router } from "express";
 const router = Router();
-import auth from "../middleware/auth.js";
 
-import { getAll, register, login } from "../controllers/user.js";
-
-/**
- * @swagger
- * /:
- *  get:
- *    tags:
- *    - "/user/"
- *    summary: Get all users
- *    parameters:
- *    - in: header
- *      name: Bearer
- *      description: User token
- *    responses:
- *      '200':
- *        description: All
- *      '400':
- *        description: An unsuccessful response
- */
-
-router.get("/", auth, getAll);
+import { register, login } from "../controllers/user.js";
 
 /**
  * @swagger
