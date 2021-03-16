@@ -5,10 +5,10 @@ import { register, login } from "../controllers/user.js";
 
 /**
  * @swagger
- * /user/:
+ * /user:
  *  post:
  *    tags:
- *    - "/user/"
+ *    - "user"
  *    summary: Register a new user
  *    parameters:
  *    - name: "body"
@@ -60,8 +60,8 @@ router.post("/", register);
  * /user/login:
  *  post:
  *    tags:
- *    - "/user/"
- *    summary: Login a user
+ *    - "user"
+ *    summary: Login with user credentials
  *    parameters:
  *    - name: "body"
  *      in: "body"
