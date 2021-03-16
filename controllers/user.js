@@ -59,7 +59,7 @@ const login = async (req, res) => {
       message: "You have been successfully logged in!",
     });
   } catch (error) {
-    res.status(400).json({ success: false, message: error });
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 
