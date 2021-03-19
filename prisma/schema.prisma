@@ -16,13 +16,14 @@ model achievement {
 }
 
 model code {
+  id           Int       @id @default(autoincrement())
   code_type_id Int
   user_id      Int
-  value        String?   @db.Char(64)
+  value        String    @db.VarChar(64)
   code_type    code_type @relation(fields: [code_type_id], references: [id])
   user         user      @relation(fields: [user_id], references: [id])
 
-  @@id([code_type_id, user_id])
+  @@index([code_type_id], name: "code_code_type_id_fk")
   @@index([user_id], name: "code_user_id_fk")
 }
 
