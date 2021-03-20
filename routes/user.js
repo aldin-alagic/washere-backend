@@ -120,13 +120,15 @@ router.post("/login", login);
  *            type: "string"
  *    responses:
  *      '200':
- *        description: A successful response, denoting that the reset code has been successfully sent to user's email
+ *        description: A successful response, denoting that the reset code has been successfully sent to user's email (email sent back in response)
  *        schema:
  *          type: object
  *          properties:
  *            success:
  *              type: boolean
  *              default: true
+ *            data:
+ *              type: integer
  *            message:
  *              type: string
  *              default: Reset code has been succesfully sent!
@@ -161,13 +163,15 @@ router.post("/reset-code", resetCode);
  *            type: "string"
  *    responses:
  *      '200':
- *        description: A successful response, denoting that the reset code has been successfully verified
+ *        description: A successful response, denoting that the reset code has been successfully verified (also sent back in response)
  *        schema:
  *          type: object
  *          properties:
  *            success:
  *              type: boolean
  *              default: true
+ *            data:
+ *              type: integer
  *            message:
  *              type: string
  *              default: Reset code has been succesfully verified!
