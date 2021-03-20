@@ -89,7 +89,7 @@ const resetCode = async (req, res) => {
       html: `<p>Hello, you've recently requested a password reset. Please use this code in the application for verification before changing the password: ${resetCode} <br> Enjoy!<br>Sincerely, WasHere team</p>`,
     };
     await sgMail.send(msg);
-    res.status(200).json({ success: true, message: "Reset code has been succesfully sent!" });
+    res.status(200).json({ success: true, data: email, message: "Reset code has been succesfully sent!" });
   } catch (error) {
     res.status(400).json({ success: false, message: error });
   }
@@ -102,7 +102,7 @@ const verifyResetCode = async (req, res) => {
     const resetCodeDb = await prisma.code.findFirst({ where: { value: resetCode } });
     if (resetCodeDb == null) throw "You have entered an invalid reset code!";
 
-    res.status(200).json({ success: true, message: "Reset code has been successfully verified!" });
+    res.status(200).json({ success: true, data: resetCode, message: "Reset code has been successfully verified!" });
   } catch (error) {
     res.status(400).json({ success: false, message: error });
   }
