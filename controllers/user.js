@@ -61,12 +61,12 @@ const resetCode = async (req, res) => {
   const email = req.body.email;
 
   try {
-    const resetCode = Math.floor(100000 + Math.random() * 900000); // broj od 6 znamenki
+    const resetCode = Math.floor(100000 + Math.random() * 900000);
 
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      throw "You have entered an invalid e-mail address!";
+      throw new Error("You have entered an invalid e-mail address!");
     }
 
     const codeTypeId = (await prisma.code_type.findUnique({ where: { name: "password_reset_code" } })).id;
@@ -91,7 +91,7 @@ const resetCode = async (req, res) => {
     await sgMail.send(msg);
     res.status(200).json({ success: true, data: email, message: "Reset code has been succesfully sent!" });
   } catch (error) {
-    res.status(400).json({ success: false, message: error });
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 
@@ -100,11 +100,11 @@ const verifyResetCode = async (req, res) => {
 
   try {
     const resetCodeDb = await prisma.code.findFirst({ where: { value: resetCode } });
-    if (resetCodeDb == null) throw "You have entered an invalid reset code!";
+    if (resetCodeDb == null) throw new Error("You have entered an invalid reset code!");
 
     res.status(200).json({ success: true, data: resetCode, message: "Reset code has been successfully verified!" });
   } catch (error) {
-    res.status(400).json({ success: false, message: error });
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 
@@ -113,7 +113,7 @@ const resetPassword = async (req, res) => {
   try {
     const passwordResetCode = await prisma.code.findFirst({ where: { value: resetCode } });
 
-    if (passwordResetCode == null) throw "You have entered an invalid reset code!";
+    if (passwordResetCode == null) throw new Error("You have entered an invalid reset code!");
 
     const user = await prisma.user.findUnique({ where: { id: passwordResetCode.user_id } });
 
@@ -130,7 +130,7 @@ const resetPassword = async (req, res) => {
 
     res.status(200).json({ success: true, message: "Your password has been successfully reset!" });
   } catch (error) {
-    res.status(400).json({ success: false, message: error });
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 
