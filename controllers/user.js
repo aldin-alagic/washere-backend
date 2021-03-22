@@ -72,7 +72,7 @@ const resetCode = async (req, res) => {
     const codeTypeId = (await prisma.code_type.findUnique({ where: { name: "password_reset_code" } })).id;
 
     // Generate a password reset token
-    const passwordResetCode = await prisma.code.create({
+    await prisma.code.create({
       data: {
         code_type_id: codeTypeId,
         user_id: user.id,
@@ -115,7 +115,7 @@ const resetPassword = async (req, res) => {
 
     if (passwordResetCode == null) throw new Error("You have entered an invalid reset code!");
 
-    const user = await prisma.user.findUnique({ where: { id: passwordResetCode.user_id } });
+    await prisma.user.findUnique({ where: { id: passwordResetCode.user_id } });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
