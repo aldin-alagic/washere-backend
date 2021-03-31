@@ -17,7 +17,7 @@ const register = async (req, res) => {
     });
     res.status(200).json({ success: true, message: "You have been successfully registered!" });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    res.status(400).json({ success: false, message: "Unable to register user! Please check your input." });
   }
 };
 
