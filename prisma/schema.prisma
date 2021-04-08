@@ -75,9 +75,9 @@ model post {
   id          Int       @id @default(autoincrement())
   user_id     Int
   description String?   @db.Text
-  public      Boolean?
-  latitude    Decimal?  @db.Decimal(11, 7)
-  longitude   Decimal?  @db.Decimal(11, 7)
+  is_public   Boolean?
+  latitude    Decimal?  @db.Decimal(8, 6)
+  longitude   Decimal?  @db.Decimal(9, 6)
   views       Int?
   created_at  DateTime? @default(now()) @db.Timestamp(0)
   user        user      @relation(fields: [user_id], references: [id])
