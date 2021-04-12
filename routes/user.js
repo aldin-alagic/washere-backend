@@ -18,7 +18,7 @@ import { register, login, resetCode, verifyResetCode, resetPassword } from "../c
  *        type: "object"
  *        properties:
  *          role_id:
- *            type: "string"
+ *            type: "number"
  *          fullname:
  *            type: "string"
  *          username:
