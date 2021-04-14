@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 
-import { register, login, resetCode, verifyResetCode, resetPassword } from "../controllers/user.js";
+import * as userController from "../controllers/user.js";
 
 /**
  * @swagger
@@ -53,7 +53,7 @@ import { register, login, resetCode, verifyResetCode, resetPassword } from "../c
  *              type: string
  */
 
-router.post("/", register);
+router.post("/", userController.register);
 
 /**
  * @swagger
@@ -100,7 +100,7 @@ router.post("/", register);
  *              type: string
  */
 
-router.post("/login", login);
+router.post("/login", userController.login);
 
 /**
  * @swagger
@@ -143,7 +143,7 @@ router.post("/login", login);
  *            message:
  *              type: string
  */
-router.post("/reset-code", resetCode);
+router.post("/reset-code", userController.resetCode);
 
 /**
  * @swagger
@@ -186,7 +186,7 @@ router.post("/reset-code", resetCode);
  *            message:
  *              type: string
  */
-router.post("/verify-reset-code", verifyResetCode);
+router.post("/verify-reset-code", userController.verifyResetCode);
 
 /**
  * @swagger
@@ -229,6 +229,8 @@ router.post("/verify-reset-code", verifyResetCode);
  *            message:
  *              type: string
  */
-router.post("/reset-password", resetPassword);
+router.post("/reset-password", userController.resetPassword);
+
+// router.patch();
 
 export default router;
