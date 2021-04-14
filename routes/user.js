@@ -231,6 +231,50 @@ router.post("/verify-reset-code", userController.verifyResetCode);
  */
 router.post("/reset-password", userController.resetPassword);
 
-// router.patch();
+/**
+ * @swagger
+ * /user/{userId}:
+ *  patch:
+ *    tags:
+ *    - "user"
+ *    summary: Update user profile information
+ *    parameters:
+ *    - name: "body"
+ *      in: "body"
+ *      description: "User's information"
+ *      schema:
+ *        type: "object"
+ *        properties:
+ *          about:
+ *            type: "string"
+ *          country:
+ *            type: "string"
+ *          place:
+ *            type: "string"
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: true
+ *            message:
+ *              type: string
+ *              default: Your information has been updated!
+ *
+ *      '400':
+ *        description: An unsuccesful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ */
+router.patch("/:userId", userController.updateProfile);
 
 export default router;
