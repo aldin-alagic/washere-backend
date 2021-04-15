@@ -7,14 +7,19 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export const register = async (req, res) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const { password } = req.body;
 
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Store the user in DB
     await prisma.user.create({
       data: {
         ...req.body,
         password: hashedPassword,
       },
     });
+
     res.status(200).json({ success: true, message: "You have been successfully registered!" });
   } catch (error) {
     res.status(400).json({ success: false, message: "Unable to register user! Please check your input." });
@@ -22,14 +27,16 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
   try {
+    const { email, password } = req.body;
+
     // Check if user exists
     const user = await prisma.user.findUnique({
       where: {
         email: email,
       },
     });
+
     if (!user) return res.status(401).json({ success: false, message: "Invalid email or password!" });
 
     // Check for matching passwords
@@ -59,9 +66,9 @@ export const login = async (req, res) => {
 };
 
 export const resetCode = async (req, res) => {
-  const email = req.body.email;
-
   try {
+    const { email } = req.body;
+
     const resetCode = Math.floor(100000 + Math.random() * 900000);
     const user = await prisma.user.findUnique({ where: { email } });
 
@@ -95,9 +102,9 @@ export const resetCode = async (req, res) => {
 };
 
 export const verifyResetCode = async (req, res) => {
-  const { resetCode } = req.body;
-
   try {
+    const { resetCode } = req.body;
+
     const resetCodeDb = await prisma.code.findFirst({ where: { value: resetCode } });
     if (resetCodeDb == null) throw new Error("You have entered an invalid reset code!");
 
@@ -108,8 +115,9 @@ export const verifyResetCode = async (req, res) => {
 };
 
 export const resetPassword = async (req, res) => {
-  const { password, resetCode } = req.body;
   try {
+    const { password, resetCode } = req.body;
+
     const passwordResetCode = await prisma.code.findFirst({ where: { value: resetCode } });
     if (passwordResetCode == null) throw new Error("You have entered an invalid reset code!");
 
@@ -126,6 +134,21 @@ export const resetPassword = async (req, res) => {
     await prisma.code.deleteMany({ where: { user_id: passwordResetCode.user_id } });
 
     res.status(200).json({ success: true, message: "Your password has been successfully reset!" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    await prisma.user.update({
+      where: { id: parseInt(userId) },
+      data: { ...req.body },
+    });
+
+    res.status(200).json({ success: true, message: "Your information has been updated!" });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

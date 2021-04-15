@@ -19,6 +19,7 @@ import * as userController from "../controllers/user.js";
  *        properties:
  *          role_id:
  *            type: "number"
+ *            description: User's role (administrator etc.)
  *          fullname:
  *            type: "string"
  *          username:
@@ -161,6 +162,7 @@ router.post("/reset-code", userController.resetCode);
  *        properties:
  *          resetCode:
  *            type: "string"
+ *            description: User's password reset code that has been e-mailed to them
  *    responses:
  *      '200':
  *        description: A successful response, denoting that the reset code has been successfully verified (also sent back in response)
@@ -204,8 +206,10 @@ router.post("/verify-reset-code", userController.verifyResetCode);
  *        properties:
  *          resetCode:
  *            type: "string"
+ *            description: Password reset code unique to the user resetting the password
  *          password:
  *            type: "string"
+ *            description: User's new password
  *    responses:
  *      '200':
  *        description: A successful response, denoting that the user's password has been successfully reset
@@ -231,6 +235,62 @@ router.post("/verify-reset-code", userController.verifyResetCode);
  */
 router.post("/reset-password", userController.resetPassword);
 
-// router.patch();
+/**
+ * @swagger
+ * /user/{userId}:
+ *  patch:
+ *    tags:
+ *    - "user"
+ *    summary: Update user profile information
+ *    parameters:
+ *    - name: "body"
+ *      in: "body"
+ *      description: "User's information. At least one property should be passed"
+ *      schema:
+ *        type: "object"
+ *        properties:
+ *          about:
+ *            type: "string"
+ *            description: General information about the user
+ *          country:
+ *            type: "string"
+ *            description: ISO 3166-1 alpha-3 code of the user's country
+ *          place:
+ *            type: "string"
+ *            description: User's residence
+ *          contact_telegram:
+ *            type: "string"
+ *            description: Contact number for Telegram
+ *          contact_messenger:
+ *            type: "string"
+ *            description: Contact number for Facebook Messenger
+ *          contact_whatsapp:
+ *            type: "string"
+ *            description: Contact number for WhatsApp
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: true
+ *            message:
+ *              type: string
+ *              default: Your information has been updated!
+ *
+ *      '400':
+ *        description: An unsuccesful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ */
+router.patch("/:userId", userController.updateProfile);
 
 export default router;
