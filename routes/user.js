@@ -143,6 +143,7 @@ router.post("/login", userController.login);
  *            message:
  *              type: string
  */
+
 router.post("/reset-code", userController.resetCode);
 
 /**
@@ -186,6 +187,7 @@ router.post("/reset-code", userController.resetCode);
  *            message:
  *              type: string
  */
+
 router.post("/verify-reset-code", userController.verifyResetCode);
 
 /**
@@ -229,8 +231,48 @@ router.post("/verify-reset-code", userController.verifyResetCode);
  *            message:
  *              type: string
  */
+
 router.post("/reset-password", userController.resetPassword);
 
-// router.patch();
+/**
+ * @swagger
+ * /user/{userId}/profile-photo:
+ *  post:
+ *    tags:
+ *    - "user"
+ *    summary: Uploads user's profile photo
+ *    parameters:
+ *    - name: "userId"
+ *      in: "path"
+ *      description: "User ID"
+ *    - name: "photo"
+ *      in: "body"
+ *      schema:
+ *          type: file
+ *    responses:
+ *      '200':
+ *        description: A successful response, denoting that the profile photo has been successfully uploaded
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: true
+ *            message:
+ *              type: string
+ *              default: Your new profile photo has been set!
+ *      '400':
+ *        description: An unsuccesful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ */
+
+router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
 
 export default router;
