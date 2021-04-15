@@ -240,6 +240,8 @@ router.post("/reset-password", userController.resetPassword);
  *  post:
  *    tags:
  *    - "user"
+ *    consumes:
+ *      - multipart/form-data
  *    summary: Uploads user's profile photo
  *    parameters:
  *    - name: "userId"
