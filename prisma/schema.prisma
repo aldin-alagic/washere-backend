@@ -132,6 +132,9 @@ model user {
   created_at                             DateTime?          @default(now()) @db.Timestamp(0)
   country                                String?            @db.Char(3)
   place                                  String?            @db.VarChar(50)
+  contact_telegram                       String?            @db.VarChar(40)
+  contact_messenger                      String?            @db.VarChar(40)
+  contact_whatsapp                       String?            @db.VarChar(40)
   country_countryTouser                  country?           @relation(fields: [country], references: [countrycode])
   role                                   role               @relation(fields: [role_id], references: [id])
   code                                   code[]
