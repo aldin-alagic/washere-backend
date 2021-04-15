@@ -251,6 +251,12 @@ router.post("/reset-password", userController.resetPassword);
  *            type: "string"
  *          place:
  *            type: "string"
+ *          contact_telegram:
+ *            type: "string"
+ *          contact_messenger:
+ *            type: "string"
+ *          contact_whatsapp:
+ *            type: "string"
  *    responses:
  *      '200':
  *        description: A successful response
