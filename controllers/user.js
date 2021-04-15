@@ -148,7 +148,7 @@ export const updateProfile = async (req, res) => {
       data: { ...req.body },
     });
 
-    res.status(200).json({ succes: true, message: "Your information has been updated!" });
+    res.status(200).json({ success: true, message: "Your information has been updated!" });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
