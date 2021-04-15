@@ -1,7 +1,10 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import prisma from "../prisma/client.js";
 import sgMail from "@sendgrid/mail";
+import { nanoid } from "nanoid";
+
+import prisma from "../prisma/client.js";
+import s3 from "../config/s3.js";
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -149,6 +152,40 @@ export const updateProfile = async (req, res) => {
     });
 
     res.status(200).json({ success: true, message: "Your information has been updated!" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const uploadProfilePhoto = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { photo } = req.files;
+
+    // Upload profile photo to S3
+    const fileName = nanoid();
+
+    const params = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Body: photo.data,
+      Key: "profile-photos/" + fileName,
+      ACL: "public-read",
+      ContentType: "image/jpeg",
+    };
+
+    await s3.upload(params).promise();
+
+    // Store the profile photo file name to the database
+    await prisma.user.update({
+      where: {
+        id: parseInt(userId),
+      },
+      data: {
+        profile_photo: fileName,
+      },
+    });
+
+    res.status(200).json({ success: true, message: "Your new profile photo has been set!" });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

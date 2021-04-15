@@ -135,6 +135,7 @@ model user {
   contact_telegram                       String?            @db.VarChar(40)
   contact_messenger                      String?            @db.VarChar(40)
   contact_whatsapp                       String?            @db.VarChar(40)
+  profile_photo                          String?            @db.VarChar(21)
   country_countryTouser                  country?           @relation(fields: [country], references: [countrycode])
   role                                   role               @relation(fields: [role_id], references: [id])
   code                                   code[]
