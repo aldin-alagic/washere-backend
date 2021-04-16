@@ -7,6 +7,7 @@ import fileUpload from "express-fileupload";
 
 import routes from "./routes/index.js";
 import swaggerOptions from "./config/swagger.js";
+import wss from "./websocket/index.js";
 
 const app = express();
 
@@ -18,4 +19,8 @@ app.use(express.json());
 app.use(fileUpload());
 app.use("/", routes);
 
-app.listen(process.env.PORT || 8080, () => console.log(`Server started!`));
+// Start Express server
+const server = app.listen(process.env.PORT || 8080, () => console.log(`Server started!`));
+
+// Start socket.io server
+wss(server);
