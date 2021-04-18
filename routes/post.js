@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 
-import { newPost } from "../controllers/post.js";
+import { newPost, getPost } from "../controllers/post.js";
 
 /**
  * @swagger
@@ -10,10 +10,9 @@ import { newPost } from "../controllers/post.js";
  *    tags:
  *    - "post"
  *    summary: Submit a new post
+ *    security:
+ *    - bearerAuth: []
  *    parameters:
- *    - in: header
- *      name: Bearer
- *      description: User token
  *    - name: "body"
  *      in: "body"
  *      description: "New post information"
@@ -57,5 +56,55 @@ import { newPost } from "../controllers/post.js";
  */
 
 router.post("/", newPost);
+
+/**
+ * @swagger
+ * /post/{postId}:
+ *  get:
+ *    tags:
+ *    - "post"
+ *    summary: Get post information (description, comments etc.)
+ *    security:
+ *    - bearerAuth: []
+ *    parameters:
+ *    - name: "userId"
+ *      in: "path"
+ *      description: "User ID"
+ *    responses:
+ *      '200':
+ *        description: A successful response, denoting that the post information has been successfully fetched
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: true
+ *            data:
+ *              type: object
+ *              description: Post information
+ *      '404':
+ *        description: Post with the given ID does not exist
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ *              default: "Post with the given ID does not exist!"
+ *      '400':
+ *        description: An unsuccesful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ */
+
+router.get("/:postId", getPost);
 
 export default router;
