@@ -294,6 +294,7 @@ router.post("/reset-password", userController.resetPassword);
  *              type: string
  *
  */
+
 router.patch("/:userId", userController.updateProfile);
 
 /**
@@ -336,6 +337,7 @@ router.patch("/:userId", userController.updateProfile);
  *            message:
  *              type: string
  */
+
 router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
 
 export default router;
