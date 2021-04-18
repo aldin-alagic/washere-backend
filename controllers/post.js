@@ -40,7 +40,7 @@ export const getPost = async (req, res) => {
             profile_photo: true,
           },
         },
-        comment: {
+        comments: {
           select: {
             id: true,
             text: true,

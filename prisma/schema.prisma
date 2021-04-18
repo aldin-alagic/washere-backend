@@ -81,7 +81,7 @@ model post {
   views       Int?
   created_at  DateTime? @default(now()) @db.Timestamp(0)
   user        user      @relation(fields: [user_id], references: [id])
-  comment     comment[]
+  comments     comment[]
   like        like[]
 
   @@index([user_id], name: "post_user_id_fk")
