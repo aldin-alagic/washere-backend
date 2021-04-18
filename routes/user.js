@@ -245,6 +245,8 @@ router.post("/reset-password", userController.resetPassword);
  *    tags:
  *    - "user"
  *    summary: Update user profile information
+ *    security:
+ *    - bearerAuth: []
  *    parameters:
  *    - name: "body"
  *      in: "body"
@@ -306,6 +308,8 @@ router.patch("/:userId", userController.updateProfile);
  *    consumes:
  *      - multipart/form-data
  *    summary: Uploads user's profile photo
+ *    security:
+ *    - bearerAuth: []
  *    parameters:
  *    - name: "userId"
  *      in: "path"
