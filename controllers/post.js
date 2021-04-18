@@ -32,7 +32,14 @@ export const getPost = async (req, res) => {
       where: {
         id: parseInt(postId),
       },
-      include: {
+      select: {
+        id: true,
+        description: true,
+        is_public: true,
+        latitude: true,
+        longitude: true,
+        views: true,
+        created_at: true,
         user: {
           select: {
             id: true,
