@@ -185,7 +185,7 @@ export const uploadProfilePhoto = async (req, res) => {
       },
     });
 
-    res.status(200).json({ success: true, message: "Your new profile photo has been set!" });
+    res.status(200).json({ success: true, data: { message: "Your new profile photo has been set!", photo_key: fileName } });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
