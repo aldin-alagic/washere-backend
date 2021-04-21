@@ -230,7 +230,7 @@ export const getUser = async (req, res) => {
                 },
               },
             },
-            post_photos: {
+            photos: {
               select: {
                 photo_key: true,
               },
