@@ -72,17 +72,18 @@ model like {
 }
 
 model post {
-  id          Int       @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   user_id     Int
-  description String?   @db.Text
+  description String?       @db.Text
   is_public   Boolean?
-  latitude    Decimal?  @db.Decimal(17, 15)
-  longitude   Decimal?  @db.Decimal(17, 15)
+  latitude    Decimal?      @db.Decimal(17, 15)
+  longitude   Decimal?      @db.Decimal(17, 15)
   views       Int?
-  created_at  DateTime? @default(now()) @db.Timestamp(0)
-  user        user      @relation(fields: [user_id], references: [id])
-  comments     comment[]
+  created_at  DateTime?     @default(now()) @db.Timestamp(0)
+  user        user          @relation(fields: [user_id], references: [id])
+  comments    comment[]
   like        like[]
+  photos      post_photos[]
 
   @@index([user_id], name: "post_user_id_fk")
 }
@@ -168,4 +169,12 @@ model country {
   countryname String  @db.VarChar(200)
   code        String? @db.Char(2)
   user        user[]
+}
+
+model post_photos {
+  post_id   Int
+  photo_key String @db.VarChar(21)
+  post      post   @relation(fields: [post_id], references: [id])
+
+  @@id([post_id, photo_key])
 }
