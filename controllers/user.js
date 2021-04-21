@@ -192,7 +192,7 @@ export const uploadProfilePhoto = async (req, res) => {
   }
 };
 
-export const getPosts = async (req, res) => {
+export const getUser = async (req, res) => {
   try {
     const { userId } = req.params;
     const user = req.user;

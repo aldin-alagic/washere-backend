@@ -473,6 +473,6 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
  *              type: string
  */
 
-router.get("/:userId", userController.getPosts);
+router.get("/:userId", userController.getUser);
 
 export default router;
