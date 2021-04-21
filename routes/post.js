@@ -20,17 +20,22 @@ import { newPost, getPost } from "../controllers/post.js";
  *        type: "object"
  *        properties:
  *          description:
- *            type: "string"
+ *            type: string
  *            description: Post text that the end user enters
  *          is_public:
  *            type: boolean
  *            description: Whether the post is public or not
  *          latitude:
- *            type: "number"
+ *            type: number
  *            description: In format XX.XXXXXX (additional decimal digits are truncated)
  *          longitude:
- *            type: "number"
+ *            type: number
  *            description: In format (X)XX.XXXXXX (same as latitude, but longitude can have three signficant digits)
+ *          photos:
+ *            type: array
+ *            description: Array of photos in Base64 format
+ *            items:
+ *              type: string
  *    responses:
  *      '200':
  *        description: A successful response, denoting that the post has been successfully created.

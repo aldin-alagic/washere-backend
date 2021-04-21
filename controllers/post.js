@@ -1,18 +1,48 @@
 import prisma from "../prisma/client.js";
+import { nanoid } from "nanoid";
+
+import s3 from "../config/s3.js";
 
 export const newPost = async (req, res) => {
   try {
-    const { description, is_public, latitude, longitude } = req.body;
+    const { description, is_public, latitude, longitude, photos } = req.body;
     const user = req.user;
 
     // Store the post in the database
-    await prisma.post.create({
+    const post = await prisma.post.create({
       data: {
         user_id: user.id,
         description,
         is_public,
         latitude,
         longitude,
+      },
+    });
+
+    // Upload photos to S3
+    const photo_keys = [];
+    for await (const photo of photos) {
+      const fileName = nanoid();
+      const data = Buffer.from(photo.replace(/^data:image\/\w+;base64,/, ""), "base64");
+      const params = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Body: data,
+        Key: "post-photos/" + fileName,
+        ACL: "public-read",
+        ContentEncoding: "base64",
+        ContentType: "image/jpeg",
+      };
+      photo_keys.push(fileName);
+      await s3.upload(params).promise();
+    }
+
+    // Store photo keys to database
+    await prisma.post.update({
+      where: { id: post.id },
+      data: {
+        photos: {
+          create: photo_keys.map((photo) => ({ photo_key: photo })),
+        },
       },
     });
 
