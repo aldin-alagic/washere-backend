@@ -90,6 +90,11 @@ export const getPost = async (req, res) => {
             },
           },
         },
+        post_photos: {
+          select: {
+            photo_key: true,
+          },
+        },
       },
     });
 

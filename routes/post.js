@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 
-import { newPost, getPost } from "../controllers/post.js";
+import * as postController from "../controllers/post.js";
 
 /**
  * @swagger
@@ -60,7 +60,7 @@ import { newPost, getPost } from "../controllers/post.js";
  *              type: string
  */
 
-router.post("/", newPost);
+router.post("/", postController.newPost);
 
 /**
  * @swagger
@@ -72,9 +72,9 @@ router.post("/", newPost);
  *    security:
  *    - bearerAuth: []
  *    parameters:
- *    - name: "userId"
+ *    - name: "postId"
  *      in: "path"
- *      description: "User ID"
+ *      description: "Post ID"
  *    responses:
  *      '200':
  *        description: A successful response, denoting that the post information has been successfully fetched
@@ -120,7 +120,7 @@ router.post("/", newPost);
  *                      description: Full name of the user who made the post
  *                    profile_photo:
  *                      type: string
- *                      description: Key to the profile photo of the user who made the post
+ *                      description: AWS S3 key to the profile photo of the user who made the post
  *                comments:
  *                  type: array
  *                  items:
@@ -145,6 +145,14 @@ router.post("/", newPost);
  *                          fullname:
  *                            type: string
  *                            description: Full name of the user who posted the comment
+ *                post_photos:
+ *                  type: array
+ *                  items:
+ *                    type: object
+ *                    properties:
+ *                      photo_key:
+ *                        type: string
+ *                        description: AWS S3 key of the post photo
  *      '404':
  *        description: Post with the given ID does not exist
  *        schema:
@@ -168,6 +176,6 @@ router.post("/", newPost);
  *              type: string
  */
 
-router.get("/:postId", getPost);
+router.get("/:postId", postController.getPost);
 
 export default router;

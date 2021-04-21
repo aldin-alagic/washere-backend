@@ -191,3 +191,59 @@ export const uploadProfilePhoto = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const getUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const data = await prisma.user.findUnique({
+      where: {
+        id: parseInt(userId),
+      },
+      select: {
+        id: true,
+        fullname: true,
+        profile_photo: true,
+        about: true,
+        contact_telegram: true,
+        contact_messenger: true,
+        contact_whatsapp: true,
+        posts: {
+          select: {
+            id: true,
+            description: true,
+            is_public: true,
+            latitude: true,
+            longitude: true,
+            views: true,
+            created_at: true,
+            comments: {
+              select: {
+                id: true,
+                text: true,
+                created_at: true,
+                user: {
+                  select: {
+                    id: true,
+                    fullname: true,
+                  },
+                },
+              },
+            },
+            post_photos: {
+              select: {
+                photo_key: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!data) return res.status(404).json({ success: false, message: "User with the given ID does not exist!" });
+
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};

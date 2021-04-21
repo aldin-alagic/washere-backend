@@ -144,7 +144,7 @@ model user {
   friendship_friendship_friend1_idTouser friendship[]       @relation("friendship_friend1_idTouser")
   friendship_friendship_friend2_idTouser friendship[]       @relation("friendship_friend2_idTouser")
   like                                   like[]
-  post                                   post[]
+  posts                                   post[]
   statistic                              statistic[]
   transaction                            transaction[]
   user_achievement                       user_achievement[]
