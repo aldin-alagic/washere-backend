@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 
-import { newPost, getPost } from "../controllers/post.js";
+import * as postController from "../controllers/post.js";
 
 /**
  * @swagger
@@ -55,7 +55,7 @@ import { newPost, getPost } from "../controllers/post.js";
  *              type: string
  */
 
-router.post("/", newPost);
+router.post("/", postController.newPost);
 
 /**
  * @swagger
@@ -171,6 +171,6 @@ router.post("/", newPost);
  *              type: string
  */
 
-router.get("/:postId", getPost);
+router.get("/:postId", postController.getPost);
 
 export default router;
