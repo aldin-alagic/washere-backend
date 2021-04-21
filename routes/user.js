@@ -2,6 +2,7 @@ import { Router } from "express";
 const router = Router();
 
 import * as userController from "../controllers/user.js";
+import auth from "../middleware/auth.js";
 
 /**
  * @swagger
@@ -379,18 +380,27 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
  *            data:
  *              type: object
  *              properties:
- *                user:
- *                  type: object
- *                  properties:
- *                    id:
- *                      type: number
- *                      description: ID of the user who posted the comment
- *                    fullname:
- *                      type: string
- *                      description: Full name of the user who posted the comment
- *                    profile_photo:
- *                      type: string
- *                      description: AWS S3 file key to the profile photo of the user who made the post
+ *                id:
+ *                  type: number
+ *                  description: ID of the user who posted the comment
+ *                fullname:
+ *                  type: string
+ *                  description: Full name of the user who posted the comment
+ *                profile_photo:
+ *                  type: string
+ *                  description: AWS S3 file key to the profile photo of the user who made the post
+ *                about:
+ *                  type: string
+ *                  description: About text
+ *                contact_telegram:
+ *                  type: string
+ *                  description: Telegram contact information
+ *                contact_messenger:
+ *                  type: string
+ *                  description: Messenger contact information
+ *                contact_whatsapp:
+ *                  type: string
+ *                  description: WhatsApp contact information
  *                posts:
  *                  type: array
  *                  items:
@@ -451,7 +461,7 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
  *                              type: string
  *                              description: AWS S3 file key of the post photo
  *      '404':
- *        description: Post with the given ID does not exist
+ *        description: User with the given ID does not exist
  *        schema:
  *          type: object
  *          properties:
@@ -460,7 +470,7 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
  *              default: false
  *            message:
  *              type: string
- *              default: "Post with the given ID does not exist!"
+ *              default: "User with the given ID does not exist!"
  *      '400':
  *        description: An unsuccesful response
  *        schema:
@@ -473,6 +483,6 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
  *              type: string
  */
 
-router.get("/:userId", userController.getUser);
+router.get("/:userId", auth, userController.getUser);
 
 export default router;
