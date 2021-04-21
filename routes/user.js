@@ -354,4 +354,125 @@ router.patch("/:userId", userController.updateProfile);
 
 router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
 
+/**
+ * @swagger
+ * /user/{userId}:
+ *  get:
+ *    tags:
+ *    - "user"
+ *    summary: Get all information for the given user
+ *    security:
+ *    - bearerAuth: []
+ *    parameters:
+ *    - name: "userId"
+ *      in: "path"
+ *      description: "User ID"
+ *    responses:
+ *      '200':
+ *        description: A successful response, with information belonging to the specified user
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: true
+ *            data:
+ *              type: object
+ *              properties:
+ *                user:
+ *                  type: object
+ *                  properties:
+ *                    id:
+ *                      type: number
+ *                      description: ID of the user who posted the comment
+ *                    fullname:
+ *                      type: string
+ *                      description: Full name of the user who posted the comment
+ *                    profile_photo:
+ *                      type: string
+ *                      description: AWS S3 file key to the profile photo of the user who made the post
+ *                posts:
+ *                  type: array
+ *                  items:
+ *                    type: object
+ *                    properties:
+ *                      id:
+ *                        type: number
+ *                        description: Post ID
+ *                      description:
+ *                        type: string
+ *                        description: Post content
+ *                      is_public:
+ *                        type: boolean
+ *                        description: Whether the post is public or not
+ *                      latitude:
+ *                        type: number
+ *                        description: In format XX.XXXXXX (additional decimal digits are truncated)
+ *                      longitude:
+ *                        type: number
+ *                        description: In format (X)XX.XXXXXX (same as latitude, but longitude can have three signficant digits)
+ *                      views:
+ *                        type: number
+ *                        description: Number of users who have seen the post
+ *                      created_at:
+ *                       type: string
+ *                       format: date-time
+ *                       description: Date and time when the post was made
+ *                      comments:
+ *                        type: array
+ *                        items:
+ *                          type: object
+ *                          properties:
+ *                            id:
+ *                              type: number
+ *                              description: ID of the user who made the post
+ *                            text:
+ *                              type: string
+ *                              description: Full name of the user who made the post
+ *                            created_at:
+ *                              type: string
+ *                              format: date-time
+ *                              description: Date and time when the comment was made
+ *                            user:
+ *                              type: object
+ *                              properties:
+ *                                id:
+ *                                  type: number
+ *                                  description: ID of the user who posted the comment
+ *                                fullname:
+ *                                  type: string
+ *                                  description: Full name of the user who posted the comment
+ *                      post_photos:
+ *                        type: array
+ *                        items:
+ *                          type: object
+ *                          properties:
+ *                            photo_key:
+ *                              type: string
+ *                              description: AWS S3 file key of the post photo
+ *      '404':
+ *        description: Post with the given ID does not exist
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ *              default: "Post with the given ID does not exist!"
+ *      '400':
+ *        description: An unsuccesful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ */
+
+router.get("/:userId", userController.getPosts);
+
 export default router;
