@@ -195,46 +195,54 @@ export const uploadProfilePhoto = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const { userId } = req.params;
-    const user = req.user;
 
-    const posts = await prisma.post.findMany({
+    const data = await prisma.user.findUnique({
       where: {
-        user_id: parseInt(userId),
+        id: parseInt(userId),
       },
       select: {
         id: true,
-        description: true,
-        is_public: true,
-        latitude: true,
-        longitude: true,
-        views: true,
-        created_at: true,
-        comments: {
+        fullname: true,
+        profile_photo: true,
+        about: true,
+        contact_telegram: true,
+        contact_messenger: true,
+        contact_whatsapp: true,
+        posts: {
           select: {
             id: true,
-            text: true,
+            description: true,
+            is_public: true,
+            latitude: true,
+            longitude: true,
+            views: true,
             created_at: true,
-            user: {
+            comments: {
               select: {
                 id: true,
-                fullname: true,
+                text: true,
+                created_at: true,
+                user: {
+                  select: {
+                    id: true,
+                    fullname: true,
+                  },
+                },
               },
             },
-          },
-        },
-        post_photos: {
-          select: {
-            photo_key: true,
+            post_photos: {
+              select: {
+                photo_key: true,
+              },
+            },
           },
         },
       },
     });
 
-    if (!posts) return res.status(404).json({ success: false, message: "An error occured fetching user posts!" });
+    if (!data) return res.status(404).json({ success: false, message: "User with the given ID does not exist!" });
 
-    res
-      .status(200)
-      .json({ success: true, data: { user: { id: user.id, fullname: user.fullname, profile_photo: user.profile_photo }, posts } });
+    res.status(200).json({ success: true, data });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
