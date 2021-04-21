@@ -317,7 +317,11 @@ router.patch("/:userId", userController.updateProfile);
  *    - name: "photo"
  *      in: "body"
  *      schema:
- *          type: file
+ *        type: "object"
+ *        properties:
+ *          photo:
+ *            type: "string"
+ *            description: Profile photo in Base64 format
  *    responses:
  *      '200':
  *        description: A successful response, denoting that the profile photo has been successfully uploaded
@@ -327,9 +331,15 @@ router.patch("/:userId", userController.updateProfile);
  *            success:
  *              type: boolean
  *              default: true
- *            message:
- *              type: string
- *              default: Your new profile photo has been set!
+ *            data:
+ *              type: object
+ *              properties:
+ *                message:
+ *                  type: string
+ *                  default: Your new profile photo has been set!
+ *                photo_key:
+ *                  type: string
+ *                  description: Key under which the photo has been stored
  *      '400':
  *        description: An unsuccesful response
  *        schema:

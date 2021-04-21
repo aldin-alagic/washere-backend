@@ -160,16 +160,17 @@ export const updateProfile = async (req, res) => {
 export const uploadProfilePhoto = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { photo } = req.files;
+    const { photo } = req.body;
 
     // Upload profile photo to S3
     const fileName = nanoid();
-
+    const data = Buffer.from(photo.replace(/^data:image\/\w+;base64,/, ""), "base64");
     const params = {
       Bucket: process.env.S3_BUCKET_NAME,
-      Body: photo.data,
+      Body: data,
       Key: "profile-photos/" + fileName,
       ACL: "public-read",
+      ContentEncoding: "base64",
       ContentType: "image/jpeg",
     };
 
