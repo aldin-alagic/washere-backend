@@ -48,6 +48,7 @@ export const login = async (req, res) => {
 
     const token = jwt.sign(
       {
+        id: user.id,
         email: user.email,
         username: user.username,
         fullname: user.fullname,
@@ -217,6 +218,12 @@ export const getUser = async (req, res) => {
             longitude: true,
             views: true,
             created_at: true,
+            user: {
+              select: {
+                fullname: true,
+                profile_photo: true,
+              },
+            },
             comments: {
               select: {
                 id: true,
