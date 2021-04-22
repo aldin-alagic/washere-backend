@@ -380,27 +380,30 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
  *            data:
  *              type: object
  *              properties:
- *                id:
- *                  type: number
- *                  description: ID of the user who posted the comment
- *                fullname:
- *                  type: string
- *                  description: Full name of the user who posted the comment
- *                profile_photo:
- *                  type: string
- *                  description: AWS S3 file key to the profile photo of the user who made the post
- *                about:
- *                  type: string
- *                  description: About text
- *                contact_telegram:
- *                  type: string
- *                  description: Telegram contact information
- *                contact_messenger:
- *                  type: string
- *                  description: Messenger contact information
- *                contact_whatsapp:
- *                  type: string
- *                  description: WhatsApp contact information
+ *                user:
+ *                  type: object
+ *                  properties:
+ *                    id:
+ *                      type: number
+ *                      description: ID of the user who posted the comment
+ *                    fullname:
+ *                      type: string
+ *                      description: Full name of the user who posted the comment
+ *                    profile_photo:
+ *                      type: string
+ *                      description: AWS S3 file key to the profile photo of the user who made the post
+ *                    about:
+ *                      type: string
+ *                      description: About text
+ *                    contact_telegram:
+ *                      type: string
+ *                      description: Telegram contact information
+ *                    contact_messenger:
+ *                      type: string
+ *                      description: Messenger contact information
+ *                    contact_whatsapp:
+ *                      type: string
+ *                      description: WhatsApp contact information
  *                posts:
  *                  type: array
  *                  items:
