@@ -254,3 +254,50 @@ export const getUser = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const getFeed = async (req, res) => {
+  try {
+    const data = await prisma.post.findMany({
+      where: {
+        is_public: true,
+      },
+      select: {
+        id: true,
+        description: true,
+        is_public: true,
+        latitude: true,
+        longitude: true,
+        views: true,
+        created_at: true,
+        user: {
+          select: {
+            fullname: true,
+            profile_photo: true,
+          },
+        },
+        comments: {
+          select: {
+            id: true,
+            text: true,
+            created_at: true,
+            user: {
+              select: {
+                id: true,
+                fullname: true,
+              },
+            },
+          },
+        },
+        photos: {
+          select: {
+            photo_key: true,
+          },
+        },
+      },
+    });
+
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
