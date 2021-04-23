@@ -149,3 +149,38 @@ export const addComment = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const toggleLike = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const user = req.user;
+    const like = await prisma.like.findFirst({
+      where: {
+        post_id: parseInt(postId),
+        user_id: parseInt(user.id),
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!like) {
+      await prisma.like.create({
+        data: {
+          user_id: user.id,
+          post_id: parseInt(postId),
+        },
+      });
+    } else {
+      await prisma.like.delete({
+        where: {
+          id: like.id,
+        },
+      });
+    }
+
+    res.status(200).json({ success: true, message: "Post like status has successfully been toggled!" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
