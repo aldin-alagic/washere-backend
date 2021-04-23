@@ -178,4 +178,70 @@ router.post("/", postController.newPost);
 
 router.get("/:postId", postController.getPost);
 
+/**
+ * @swagger
+ * /post/{postId}/comment:
+ *  post:
+ *    tags:
+ *    - "post"
+ *    summary: Add comment to a post
+ *    security:
+ *    - bearerAuth: []
+ *    parameters:
+ *    - name: "postId"
+ *      in: "path"
+ *      description: "Post ID"
+ *    responses:
+ *      '200':
+ *        description: A successful response, denoting that the comment information has been successfully added. Returns an array of all comments for that post
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: true
+ *            message:
+ *              type: string
+ *              default: "Comment added!"
+ *            data:
+ *              type: object
+ *              properties:
+ *                comments:
+ *                  type: array
+ *                  items:
+ *                    type: object
+ *                    properties:
+ *                      id:
+ *                        type: number
+ *                        description: ID of the user who made the post
+ *                      text:
+ *                        type: string
+ *                        description: Full name of the user who made the post
+ *                      created_at:
+ *                        type: string
+ *                        format: date-time
+ *                        description: Date and time when the comment was made
+ *                      user:
+ *                        type: object
+ *                        properties:
+ *                          id:
+ *                            type: number
+ *                            description: ID of the user who posted the comment
+ *                          fullname:
+ *                            type: string
+ *                            description: Full name of the user who posted the comment
+ *      '400':
+ *        description: An unsuccesful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ */
+
+router.post("/:postId/comment", postController.addComment);
+
 export default router;

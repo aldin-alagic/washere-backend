@@ -105,3 +105,47 @@ export const getPost = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const addComment = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { text } = req.body;
+    const { id: userId } = req.user;
+
+    // Add new comment
+    await prisma.comment.create({
+      data: {
+        user_id: userId,
+        post_id: parseInt(postId),
+        text,
+      },
+    });
+
+    // Fetch all comments for this post
+    const data = await prisma.post.findUnique({
+      where: {
+        id: parseInt(postId),
+      },
+      select: {
+        comments: {
+          select: {
+            id: true,
+            text: true,
+            created_at: true,
+            user: {
+              select: {
+                id: true,
+                fullname: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    res.status(200).json({ success: true, message: "Comment added!", data });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
