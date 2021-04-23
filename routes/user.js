@@ -380,27 +380,30 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
  *            data:
  *              type: object
  *              properties:
- *                id:
- *                  type: number
- *                  description: ID of the user who posted the comment
- *                fullname:
- *                  type: string
- *                  description: Full name of the user who posted the comment
- *                profile_photo:
- *                  type: string
- *                  description: AWS S3 file key to the profile photo of the user who made the post
- *                about:
- *                  type: string
- *                  description: About text
- *                contact_telegram:
- *                  type: string
- *                  description: Telegram contact information
- *                contact_messenger:
- *                  type: string
- *                  description: Messenger contact information
- *                contact_whatsapp:
- *                  type: string
- *                  description: WhatsApp contact information
+ *                user:
+ *                  type: object
+ *                  properties:
+ *                    id:
+ *                      type: number
+ *                      description: ID of the user who posted the comment
+ *                    fullname:
+ *                      type: string
+ *                      description: Full name of the user who posted the comment
+ *                    profile_photo:
+ *                      type: string
+ *                      description: AWS S3 file key to the profile photo of the user who made the post
+ *                    about:
+ *                      type: string
+ *                      description: About text
+ *                    contact_telegram:
+ *                      type: string
+ *                      description: Telegram contact information
+ *                    contact_messenger:
+ *                      type: string
+ *                      description: Messenger contact information
+ *                    contact_whatsapp:
+ *                      type: string
+ *                      description: WhatsApp contact information
  *                posts:
  *                  type: array
  *                  items:
@@ -484,5 +487,103 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
  */
 
 router.get("/:userId", auth, userController.getUser);
+
+/**
+ * @swagger
+ * /user/{userId}/feed:
+ *  get:
+ *    tags:
+ *    - "user"
+ *    summary: Get user's feed
+ *    security:
+ *    - bearerAuth: []
+ *    parameters:
+ *    - name: "userId"
+ *      in: "path"
+ *      description: "User ID"
+ *    responses:
+ *      '200':
+ *        description: A successful response, with user's feed
+ *        schema:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *              description: Post ID
+ *            description:
+ *              type: string
+ *              description: Post content
+ *            is_public:
+ *              type: boolean
+ *              description: Whether the post is public or not
+ *            latitude:
+ *              type: number
+ *              description: In format XX.XXXXXX (additional decimal digits are truncated)
+ *            longitude:
+ *              type: number
+ *              description: In format (X)XX.XXXXXX (same as latitude, but longitude can have three signficant digits)
+ *            views:
+ *              type: number
+ *              description: Number of users who have seen the post
+ *            created_at:
+ *              type: string
+ *              format: date-time
+ *              description: Date and time when the post was made
+ *            comments:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  id:
+ *                    type: number
+ *                    description: ID of the user who made the post
+ *                  text:
+ *                    type: string
+ *                    description: Full name of the user who made the post
+ *                  created_at:
+ *                    type: string
+ *                    format: date-time
+ *                    description: Date and time when the comment was made
+ *                  user:
+ *                    type: object
+ *                    properties:
+ *                      id:
+ *                        type: number
+ *                        description: ID of the user who posted the comment
+ *                      fullname:
+ *                        type: string
+ *                        description: Full name of the user who posted the comment
+ *                  post_photos:
+ *                    type: array
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        photo_key:
+ *                          type: string
+ *                          description: AWS S3 file key of the post photo
+ *      '404':
+ *        description: User with the given ID does not exist
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ *              default: "User with the given ID does not exist!"
+ *      '400':
+ *        description: An unsuccesful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ */
+
+router.get("/:userId/feed", auth, userController.getFeed);
 
 export default router;
