@@ -53,6 +53,7 @@ export const login = async (req, res) => {
         username: user.username,
         fullname: user.fullname,
         premium: user.premium,
+        profile_photo: user.profile_photo,
       },
       process.env.JWT_SECRET
     );
