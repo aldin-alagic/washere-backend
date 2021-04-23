@@ -441,7 +441,7 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
  *                              description: ID of the user who made the post
  *                            text:
  *                              type: string
- *                              description: Full name of the user who made the post
+ *                              description: Text content of the comment
  *                            created_at:
  *                              type: string
  *                              format: date-time
