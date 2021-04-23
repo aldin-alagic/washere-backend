@@ -191,6 +191,14 @@ router.get("/:postId", postController.getPost);
  *    - name: "postId"
  *      in: "path"
  *      description: "Post ID"
+ *    - name: "body"
+ *      in: "body"
+ *      schema:
+ *        type: object
+ *        properties:
+ *          text:
+ *            type: string
+ *            description: Comment text
  *    responses:
  *      '200':
  *        description: A successful response, denoting that the comment information has been successfully added. Returns an array of all comments for that post
