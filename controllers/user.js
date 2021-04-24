@@ -281,18 +281,8 @@ export const getFeed = async (req, res) => {
             profile_photo: true,
           },
         },
-        comments: {
-          select: {
-            id: true,
-            text: true,
-            created_at: true,
-            user: {
-              select: {
-                id: true,
-                fullname: true,
-              },
-            },
-          },
+        _count: {
+          select: { comments: true },
         },
         photos: {
           select: {
