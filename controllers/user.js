@@ -263,7 +263,16 @@ export const getUser = async (req, res) => {
 
 export const getFeed = async (req, res) => {
   try {
-    const data = await prisma.post.findMany({
+    const { number, lastPostId } = req.query;
+
+    const posts = await prisma.post.findMany({
+      take: parseInt(number),
+      ...(lastPostId && {
+        skip: 1,
+        cursor: {
+          id: parseInt(lastPostId),
+        },
+      }),
       where: {
         is_public: true,
       },
@@ -281,18 +290,8 @@ export const getFeed = async (req, res) => {
             profile_photo: true,
           },
         },
-        comments: {
-          select: {
-            id: true,
-            text: true,
-            created_at: true,
-            user: {
-              select: {
-                id: true,
-                fullname: true,
-              },
-            },
-          },
+        _count: {
+          select: { comments: true },
         },
         photos: {
           select: {
@@ -300,9 +299,12 @@ export const getFeed = async (req, res) => {
           },
         },
       },
+      orderBy: {
+        created_at: "desc",
+      },
     });
 
-    res.status(200).json({ success: true, data });
+    res.status(200).json({ success: true, data: { posts: posts, lastPostId: posts[posts.length - 1]?.id || lastPostId } });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
