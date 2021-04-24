@@ -291,7 +291,10 @@ export const getFeed = async (req, res) => {
           },
         },
         _count: {
-          select: { comments: true },
+          select: {
+            comments: true,
+            likes: true,
+          },
         },
         photos: {
           select: {

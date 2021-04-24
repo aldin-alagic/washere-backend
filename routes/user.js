@@ -561,6 +561,9 @@ router.get("/:userId", auth, userController.getUser);
  *                          comments:
  *                            type: number
  *                            description: Number of comments on the post
+ *                          likes:
+ *                            type: number
+ *                            description: Number of likes on the post
  *                      photos:
  *                        type: array
  *                        items:
