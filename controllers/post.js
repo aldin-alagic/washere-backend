@@ -154,6 +154,8 @@ export const toggleLike = async (req, res) => {
   try {
     const { postId } = req.params;
     const user = req.user;
+
+    // Check if user already liked the post
     const like = await prisma.like.findFirst({
       where: {
         post_id: parseInt(postId),
@@ -164,6 +166,7 @@ export const toggleLike = async (req, res) => {
       },
     });
 
+    // Like the post if it's not already liked, otherwise remove the like
     if (!like) {
       await prisma.like.create({
         data: {
