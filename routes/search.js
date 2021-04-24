@@ -12,6 +12,15 @@ import * as searchController from "../controllers/search.js";
  *    summary: Get people that match the given search query
  *    security:
  *    - bearerAuth: []
+ *    parameters:
+ *    - name: "body"
+ *      in: "body"
+ *      schema:
+ *        type: "object"
+ *        properties:
+ *          query:
+ *            type: string
+ *            description: Search query
  *    responses:
  *      '200':
  *        description: A successful response, with an array of users that match the search query
