@@ -255,7 +255,7 @@ router.post("/:postId/comment", postController.addComment);
 /**
  * @swagger
  * /post/{postId}/toggle-like:
- *  get:
+ *  post:
  *    tags:
  *    - "post"
  *    summary: Toggle post like status (like/dislike)
@@ -289,6 +289,6 @@ router.post("/:postId/comment", postController.addComment);
  *              type: string
  */
 
-router.get("/:postId/toggle-like", postController.toggleLike);
+router.post("/:postId/toggle-like", postController.toggleLike);
 
 export default router;
