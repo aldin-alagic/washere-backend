@@ -121,6 +121,15 @@ router.post("/", postController.newPost);
  *                    profile_photo:
  *                      type: string
  *                      description: AWS S3 key to the profile photo of the user who made the post
+ *                _count:
+ *                   type: object
+ *                   properties:
+ *                    comments:
+ *                      type: number
+ *                      description: Number of comments on the post
+ *                    likes:
+ *                      type: number
+ *                      description: Number of likes on the post
  *                comments:
  *                  type: array
  *                  items:

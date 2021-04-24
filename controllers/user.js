@@ -234,6 +234,12 @@ export const getUser = async (req, res) => {
             profile_photo: true,
           },
         },
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+          },
+        },
         comments: {
           select: {
             id: true,
