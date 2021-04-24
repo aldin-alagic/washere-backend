@@ -252,4 +252,43 @@ router.get("/:postId", postController.getPost);
 
 router.post("/:postId/comment", postController.addComment);
 
+/**
+ * @swagger
+ * /post/{postId}/toggle-like:
+ *  post:
+ *    tags:
+ *    - "post"
+ *    summary: Toggle post like status (like/dislike)
+ *    security:
+ *    - bearerAuth: []
+ *    parameters:
+ *    - name: "postId"
+ *      in: "path"
+ *      description: "Post ID"
+ *    responses:
+ *      '200':
+ *        description: A successful response, denoting that the post's like status has been modified
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: true
+ *            message:
+ *              type: string
+ *              default: "Post like status has successfully been toggled!"
+ *      '400':
+ *        description: An unsuccesful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ */
+
+router.post("/:postId/toggle-like", postController.toggleLike);
+
 export default router;
