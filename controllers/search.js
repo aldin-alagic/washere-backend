@@ -27,7 +27,7 @@ export const searchPeople = async (req, res) => {
       },
     });
 
-    if (!people || people.length === 0) res.status(404).json({ success: false, message: "No people match the given search query!" });
+    if (!people || people.length === 0) return res.status(404).json({ success: false, message: "No people match the given search query!" });
 
     res.status(200).json({ success: true, data: people });
   } catch (error) {
