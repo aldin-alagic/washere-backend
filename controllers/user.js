@@ -262,8 +262,9 @@ export const getUser = async (req, res) => {
 };
 
 export const getFeed = async (req, res) => {
-  const { number, lastPostId } = req.query;
   try {
+    const { number, lastPostId } = req.query;
+
     const posts = await prisma.post.findMany({
       take: parseInt(number),
       ...(lastPostId && {
@@ -303,7 +304,7 @@ export const getFeed = async (req, res) => {
       },
     });
 
-    res.status(200).json({ success: true, data: { posts: posts, lastPostId: posts[posts.length - 1].id } });
+    res.status(200).json({ success: true, data: { posts: posts, lastPostId: posts[posts.length - 1]?.id || lastPostId } });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
