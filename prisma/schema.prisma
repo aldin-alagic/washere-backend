@@ -83,7 +83,7 @@ model post {
   created_at  DateTime?     @default(now()) @db.Timestamp(0)
   user        user          @relation(fields: [user_id], references: [id])
   comments    comment[]
-  like        like[]
+  likes       like[]
   photos      post_photos[]
 
   @@index([user_id], name: "post_user_id_fk")
