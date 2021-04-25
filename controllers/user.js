@@ -318,3 +318,65 @@ export const getFeed = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const requestConnection = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { id } = req.user;
+
+    // Check if connection or connection request already exists
+    const exists = await prisma.connection.findFirst({
+      where: {
+        user1_id: id,
+        user2_id: parseInt(userId),
+      },
+    });
+
+    if (exists) return res.status(400).json({ success: false, message: "You already sent connection request to this user!" });
+
+    // Store the connection request
+    await prisma.connection.create({
+      data: {
+        user1_id: id,
+        user2_id: parseInt(userId),
+      },
+    });
+
+    res.status(200).json({ success: true, message: "Connection request sent!" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const approveConnection = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { id } = req.user;
+
+    // Update connection in the database
+    const connection = await prisma.connection.findFirst({
+      where: {
+        user1_id: 1,
+        user2_id: 2,
+      },
+    });
+
+    console.log(connection);
+
+    // // Update connection in the database
+    // await prisma.connection.findFirst({
+    //   where: {
+    //     user1_id: 1,
+    //     user2_id: 2,
+    //   },
+    //   data: {
+    //     approved: true,
+    //     approved_at: new Date(),
+    //   },
+    // });
+
+    await res.status(200).json({ success: true, message: "You are now connected!" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};

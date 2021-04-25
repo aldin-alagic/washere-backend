@@ -590,4 +590,7 @@ router.get("/:userId", auth, userController.getUser);
 
 router.get("/:userId/feed", auth, userController.getFeed);
 
+router.post("/:userId/request-connection", auth, userController.requestConnection);
+router.post("/:userId/approve-connection", auth, userController.approveConnection);
+
 export default router;
