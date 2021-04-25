@@ -154,13 +154,10 @@ router.post("/", postController.newPost);
  *                        type: string
  *                        description: AWS S3 key of the post photo
  *                post_tags:
- *                type: array
- *                items:
- *                  type: object
- *                  properties:
- *                    tag:
- *                      type: string
- *                      description: Tag used in a post
+ *                  type: array
+ *                  items:
+ *                    type: string
+ *                    description: Tag used in the post
  *      '404':
  *        description: Post with the given ID does not exist
  *        schema:
