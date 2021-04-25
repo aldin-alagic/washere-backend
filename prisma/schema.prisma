@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["selectRelationCount"]
 }
 
@@ -45,19 +45,6 @@ model comment {
 
   @@index([post_id], name: "comment_post_id_fk")
   @@index([user_id], name: "comment_user_id_fk")
-}
-
-model friendship {
-  friend1_id                       Int
-  friend2_id                       Int
-  approved                         Boolean
-  created_at                       DateTime  @default(now()) @db.Timestamp(0)
-  approved_at                      DateTime? @db.Timestamp(0)
-  user_friendship_friend1_idTouser user      @relation("friendship_friend1_idTouser", fields: [friend1_id], references: [id])
-  user_friendship_friend2_idTouser user      @relation("friendship_friend2_idTouser", fields: [friend2_id], references: [id])
-
-  @@id([friend1_id, friend2_id])
-  @@index([friend2_id], name: "friendship_user_id_fk_2")
 }
 
 model like {
@@ -118,37 +105,37 @@ model transaction {
 }
 
 model user {
-  id                                     Int                @id @default(autoincrement())
-  role_id                                Int
-  premium                                Boolean?           @default(false)
-  email                                  String             @unique @db.VarChar(255)
-  username                               String?            @unique @db.VarChar(255)
-  fullname                               String             @db.VarChar(255)
-  password                               String             @db.Char(60)
-  about                                  String?            @db.Text
-  activated                              Boolean?           @default(false)
-  deleted                                Int?               @default(0) @db.TinyInt
-  newsletter                             Boolean
-  login_attempts                         Int?               @db.TinyInt
-  last_login_at                          DateTime?          @db.Timestamp(0)
-  created_at                             DateTime?          @default(now()) @db.Timestamp(0)
-  country                                String?            @db.Char(3)
-  place                                  String?            @db.VarChar(50)
-  contact_telegram                       String?            @db.VarChar(40)
-  contact_messenger                      String?            @db.VarChar(40)
-  contact_whatsapp                       String?            @db.VarChar(40)
-  profile_photo                          String?            @db.VarChar(21)
-  country_countryTouser                  country?           @relation(fields: [country], references: [countrycode])
-  role                                   role               @relation(fields: [role_id], references: [id])
-  code                                   code[]
-  comment                                comment[]
-  friendship_friendship_friend1_idTouser friendship[]       @relation("friendship_friend1_idTouser")
-  friendship_friendship_friend2_idTouser friendship[]       @relation("friendship_friend2_idTouser")
-  like                                   like[]
-  posts                                  post[]
-  statistic                              statistic[]
-  transaction                            transaction[]
-  user_achievement                       user_achievement[]
+  id                                   Int                @id @default(autoincrement())
+  role_id                              Int
+  premium                              Boolean?           @default(false)
+  email                                String             @unique @db.VarChar(255)
+  username                             String?            @unique @db.VarChar(255)
+  fullname                             String             @db.VarChar(255)
+  password                             String             @db.Char(60)
+  about                                String?            @db.Text
+  activated                            Boolean?           @default(false)
+  deleted                              Int?               @default(0) @db.TinyInt
+  newsletter                           Boolean
+  login_attempts                       Int?               @db.TinyInt
+  last_login_at                        DateTime?          @db.Timestamp(0)
+  created_at                           DateTime?          @default(now()) @db.Timestamp(0)
+  country                              String?            @db.Char(3)
+  place                                String?            @db.VarChar(50)
+  contact_telegram                     String?            @db.VarChar(40)
+  contact_messenger                    String?            @db.VarChar(40)
+  contact_whatsapp                     String?            @db.VarChar(40)
+  profile_photo                        String?            @db.VarChar(21)
+  country_countryTouser                country?           @relation(fields: [country], references: [countrycode])
+  role                                 role               @relation(fields: [role_id], references: [id])
+  code                                 code[]
+  comment                              comment[]
+  connection_connection_user1_idTouser connection[]       @relation("connection_user1_idTouser")
+  connection_connection_user2_idTouser connection[]       @relation("connection_user2_idTouser")
+  like                                 like[]
+  posts                                post[]
+  statistic                            statistic[]
+  transaction                          transaction[]
+  user_achievement                     user_achievement[]
 
   @@index([country], name: "fk_country")
   @@index([role_id], name: "user_role_id_fk")
@@ -178,4 +165,18 @@ model post_photos {
   post      post   @relation(fields: [post_id], references: [id])
 
   @@id([post_id, photo_key])
+}
+
+model connection {
+  user1_id                       Int
+  user2_id                       Int
+  approved                       Boolean   @default(false)
+  created_at                     DateTime  @default(now()) @db.Timestamp(0)
+  approved_at                    DateTime? @db.Timestamp(0)
+  id                             Int       @id @default(autoincrement())
+  user_connection_user1_idTouser user      @relation("connection_user1_idTouser", fields: [user1_id], references: [id])
+  user_connection_user2_idTouser user      @relation("connection_user2_idTouser", fields: [user2_id], references: [id])
+
+  @@index([user1_id], name: "friendship_user_id_fk")
+  @@index([user2_id], name: "friendship_user_id_fk_2")
 }
