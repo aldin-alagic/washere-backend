@@ -46,13 +46,13 @@ export const newPost = async (req, res) => {
         },
       },
     });
-    console.log("HASHTAGS", hashtags);
+
     // Store hashtags to database
     await prisma.post.update({
       where: { id: post.id },
       data: {
         post_tags: {
-          create: hashtags.map((hashtag) => ({ tag: hashtag })),
+          create: hashtags.map((hashtag) => ({ tag: hashtag.substring(1) })),
         },
       },
     });
