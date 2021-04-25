@@ -6,6 +6,7 @@ import s3 from "../config/s3.js";
 export const newPost = async (req, res) => {
   try {
     const { description, is_public, latitude, longitude, photos } = req.body;
+    const hashtags = description.match(/#\S+/g) || [];
     const user = req.user;
 
     // Store the post in the database
@@ -45,8 +46,16 @@ export const newPost = async (req, res) => {
         },
       },
     });
-
-    // TODO: send the post to Near Me screen using web socket
+    console.log("HASHTAGS", hashtags);
+    // Store hashtags to database
+    await prisma.post.update({
+      where: { id: post.id },
+      data: {
+        post_tags: {
+          create: hashtags.map((hashtag) => ({ tag: hashtag })),
+        },
+      },
+    });
 
     res.status(200).json({ success: true, message: "Post successfully created!" });
   } catch (error) {
@@ -93,6 +102,11 @@ export const getPost = async (req, res) => {
         photos: {
           select: {
             photo_key: true,
+          },
+        },
+        post_tags: {
+          select: {
+            tag: true,
           },
         },
       },
