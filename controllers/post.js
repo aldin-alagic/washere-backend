@@ -90,6 +90,12 @@ export const getPost = async (req, res) => {
             },
           },
         },
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+          },
+        },
         photos: {
           select: {
             photo_key: true,
