@@ -126,6 +126,82 @@ export const getPost = async (req, res) => {
   }
 };
 
+export const getPostsByTag = async (req, res) => {
+  try {
+    const { number, lastPostId, query } = req.query;
+
+    const posts = await prisma.post.findMany({
+      take: parseInt(number),
+      ...(lastPostId && {
+        skip: 1,
+        cursor: {
+          id: parseInt(lastPostId),
+        },
+      }),
+      where: {
+        is_public: true,
+        post_tags: {
+          some: { tag: { contains: query } },
+        },
+      },
+      select: {
+        id: true,
+        description: true,
+        is_public: true,
+        latitude: true,
+        longitude: true,
+        views: true,
+        created_at: true,
+        user: {
+          select: {
+            id: true,
+            fullname: true,
+            profile_photo: true,
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+          },
+        },
+        comments: {
+          select: {
+            id: true,
+            text: true,
+            created_at: true,
+            user: {
+              select: {
+                id: true,
+                fullname: true,
+              },
+            },
+          },
+        },
+        photos: {
+          select: {
+            photo_key: true,
+          },
+        },
+        post_tags: {
+          select: {
+            tag: true,
+          },
+        },
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+    });
+
+    if (posts.length === 0) return res.status(404).json({ success: false, message: "No posts match the given search query!" });
+
+    res.status(200).json({ success: true, data: { posts: posts, lastPostId: posts[posts.length - 1]?.id || lastPostId } });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
 export const addComment = async (req, res) => {
   try {
     const { postId } = req.params;

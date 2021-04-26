@@ -39,56 +39,21 @@ export const searchTags = async (req, res) => {
   try {
     const { query } = req.body;
 
-    const posts = await prisma.post.findMany({
+    const tags = await prisma.post_tags.findMany({
       where: {
-        post_tags: {
-          some: { tag: { contains: query } },
+        tag: {
+          contains: query,
         },
       },
       select: {
-        id: true,
-        description: true,
-        is_public: true,
-        latitude: true,
-        longitude: true,
-        views: true,
-        created_at: true,
-        user: {
-          select: {
-            id: true,
-            fullname: true,
-            profile_photo: true,
-          },
-        },
-        comments: {
-          select: {
-            id: true,
-            text: true,
-            created_at: true,
-            user: {
-              select: {
-                id: true,
-                fullname: true,
-              },
-            },
-          },
-        },
-        photos: {
-          select: {
-            photo_key: true,
-          },
-        },
-        post_tags: {
-          select: {
-            tag: true,
-          },
-        },
+        post_tags_id: true,
+        tag: true,
       },
     });
 
-    if (posts.length === 0) return res.status(404).json({ success: false, message: "No posts match the given search query!" });
+    if (tags.length === 0) return res.status(404).json({ success: false, message: "No tags match the given search query!" });
 
-    res.status(200).json({ success: true, data: { posts } });
+    res.status(200).json({ success: true, data: { tags } });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
