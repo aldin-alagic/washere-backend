@@ -194,7 +194,7 @@ export const getPostsByTag = async (req, res) => {
       },
     });
 
-    if (posts.length === 0) return res.status(404).json({ success: false, message: "No posts match the given search query!" });
+    if (!posts) return res.status(404).json({ success: false, message: "No posts match the given search query!" });
 
     res.status(200).json({ success: true, data: { posts: posts, lastPostId: posts[posts.length - 1]?.id || lastPostId } });
   } catch (error) {
