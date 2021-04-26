@@ -130,8 +130,8 @@ model user {
   role                                 role               @relation(fields: [role_id], references: [id])
   code                                 code[]
   comment                              comment[]
-  connection_connection_user1_idTouser connection[]       @relation("connection_user1_idTouser")
-  connection_connection_user2_idTouser connection[]       @relation("connection_user2_idTouser")
+  connections1                         connection[]       @relation("connection_user1_idTouser")
+  connections2                         connection[]       @relation("connection_user2_idTouser")
   like                                 like[]
   posts                                post[]
   statistic                            statistic[]
@@ -175,8 +175,8 @@ model connection {
   created_at                     DateTime  @default(now()) @db.Timestamp(0)
   accepted_at                    DateTime? @db.Timestamp(0)
   id                             Int       @id @default(autoincrement())
-  user_connection_user1_idTouser user      @relation("connection_user1_idTouser", fields: [user1_id], references: [id])
-  user_connection_user2_idTouser user      @relation("connection_user2_idTouser", fields: [user2_id], references: [id])
+  user1                          user      @relation("connection_user1_idTouser", fields: [user1_id], references: [id])
+  user2                          user      @relation("connection_user2_idTouser", fields: [user2_id], references: [id])
 
   @@index([user1_id], name: "friendship_user_id_fk")
   @@index([user2_id], name: "friendship_user_id_fk_2")
