@@ -76,6 +76,14 @@ router.post("/", postController.newPost);
  *      in: "query"
  *      required: true
  *      description: Tag to search for
+ *    - name: "number"
+ *      in: "query"
+ *      required: true
+ *      description: Number of posts to be fetched
+ *    - name: "lastPostId"
+ *      in: "query"
+ *      required: false
+ *      description: Post ID of the last post returned in previous invocation of this request
  *    responses:
  *      '200':
  *        description: A successful response, with an array of posts that contain the specified tag
@@ -193,6 +201,7 @@ router.post("/", postController.newPost);
  *            message:
  *              type: string
  */
+
 router.get("/by-tag", postController.getPostsByTag);
 
 /**
