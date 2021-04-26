@@ -241,6 +241,60 @@ router.post("/reset-password", userController.resetPassword);
 
 /**
  * @swagger
+ * /user/connections:
+ *  get:
+ *    tags:
+ *    - "user"
+ *    summary: Get all connections for the user that is currently signed in
+ *    security:
+ *    - bearerAuth: []
+ *    responses:
+ *      '200':
+ *        description: A successful response, with array of user's connections
+ *        schema:
+ *          type: array
+ *          items:
+ *            type: object
+ *            properties:
+ *              id:
+ *                type: number
+ *                description: Connection ID
+ *              created_at:
+ *                type: string
+ *                format: date-time
+ *                description: Date and time when the connection request has been sent
+ *              accepted_at:
+ *                type: string
+ *                format: date-time
+ *                description: Date and time when the connection request has been accepted
+ *              user:
+ *                type: object
+ *                properties:
+ *                  id:
+ *                    type: number
+ *                    description: User ID
+ *                  fullname:
+ *                    type: string
+ *                    description: User's full name
+ *                  username:
+ *                    type: string
+ *                    description: User's username
+ *      '400':
+ *        description: An unsuccesful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ */
+
+router.get("/connections", auth, userController.getConnections);
+
+/**
+ * @swagger
  * /user/{userId}:
  *  patch:
  *    tags:

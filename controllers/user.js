@@ -383,3 +383,54 @@ export const acceptConnection = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const getConnections = async (req, res) => {
+  try {
+    const { id } = req.user;
+
+    const data = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        connections1: {
+          select: {
+            id: true,
+            created_at: true,
+            accepted_at: true,
+            user2: {
+              select: {
+                id: true,
+                fullname: true,
+                username: true,
+              },
+            },
+          },
+        },
+        connections2: {
+          select: {
+            id: true,
+            created_at: true,
+            accepted_at: true,
+            user1: {
+              select: {
+                id: true,
+                fullname: true,
+                username: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // Format the response to make it prettier
+    const connections = data.connections1
+      .map((c) => ({ ...c, user: c.user2, user2: undefined }))
+      .concat(data.connections2.map((c) => ({ ...c, user: c.user1, user1: undefined })));
+
+    res.status(200).json({ success: true, data: connections });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
