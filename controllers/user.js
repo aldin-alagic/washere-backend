@@ -356,24 +356,24 @@ export const approveConnection = async (req, res) => {
     // Update connection in the database
     const connection = await prisma.connection.findFirst({
       where: {
-        user1_id: 1,
-        user2_id: 2,
+        user1_id: parseInt(userId),
+        user2_id: id,
       },
     });
 
-    console.log(connection);
+    // Check if connection request is already approved
+    if (connection.approved) return res.status(400).json({ success: false, message: "You have already accepted the request!" });
 
-    // // Update connection in the database
-    // await prisma.connection.findFirst({
-    //   where: {
-    //     user1_id: 1,
-    //     user2_id: 2,
-    //   },
-    //   data: {
-    //     approved: true,
-    //     approved_at: new Date(),
-    //   },
-    // });
+    // Update connection in the database
+    await prisma.connection.update({
+      where: {
+        id: connection.id,
+      },
+      data: {
+        approved: true,
+        approved_at: new Date(),
+      },
+    });
 
     await res.status(200).json({ success: true, message: "You are now connected!" });
   } catch (error) {
