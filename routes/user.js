@@ -279,6 +279,9 @@ router.post("/reset-password", userController.resetPassword);
  *                  username:
  *                    type: string
  *                    description: User's username
+ *                  profile_photo:
+ *                    type: string
+ *                    description: AWS S3 file key to the profile photo of the user who made the post
  *      '400':
  *        description: An unsuccesful response
  *        schema:
