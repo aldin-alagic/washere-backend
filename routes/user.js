@@ -672,6 +672,17 @@ router.post("/:userId/request-connection", auth, userController.requestConnectio
  *            message:
  *              type: string
  *              default: You have already accepted the request!
+ *      '404':
+ *        description: When the connection request from the given user does not exist
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ *              default: Connection request does not exist!
  */
 
 router.post("/:userId/accept-connection", auth, userController.acceptConnection);

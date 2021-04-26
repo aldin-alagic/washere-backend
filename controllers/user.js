@@ -361,6 +361,9 @@ export const acceptConnection = async (req, res) => {
       },
     });
 
+    // Check if connection request exists
+    if (!connection) return res.status(404).json({ success: false, message: "Connection request does not exist!" });
+
     // Check if connection request is already accepted
     if (connection.accepted) return res.status(400).json({ success: false, message: "You have already accepted the request!" });
 
