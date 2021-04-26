@@ -348,7 +348,7 @@ export const requestConnection = async (req, res) => {
   }
 };
 
-export const approveConnection = async (req, res) => {
+export const acceptConnection = async (req, res) => {
   try {
     const { userId } = req.params;
     const { id } = req.user;
@@ -361,8 +361,8 @@ export const approveConnection = async (req, res) => {
       },
     });
 
-    // Check if connection request is already approved
-    if (connection.approved) return res.status(400).json({ success: false, message: "You have already accepted the request!" });
+    // Check if connection request is already accepted
+    if (connection.accepted) return res.status(400).json({ success: false, message: "You have already accepted the request!" });
 
     // Update connection in the database
     await prisma.connection.update({
@@ -370,8 +370,8 @@ export const approveConnection = async (req, res) => {
         id: connection.id,
       },
       data: {
-        approved: true,
-        approved_at: new Date(),
+        accepted: true,
+        accepted_at: new Date(),
       },
     });
 
