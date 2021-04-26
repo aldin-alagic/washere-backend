@@ -72,6 +72,7 @@ model post {
   comments    comment[]
   likes       like[]
   photos      post_photos[]
+  post_tags   post_tags[]
 
   @@index([user_id], name: "post_user_id_fk")
 }
@@ -170,13 +171,22 @@ model post_photos {
 model connection {
   user1_id                       Int
   user2_id                       Int
-  approved                       Boolean   @default(false)
+  accepted                       Boolean   @default(false)
   created_at                     DateTime  @default(now()) @db.Timestamp(0)
-  approved_at                    DateTime? @db.Timestamp(0)
+  accepted_at                    DateTime? @db.Timestamp(0)
   id                             Int       @id @default(autoincrement())
   user_connection_user1_idTouser user      @relation("connection_user1_idTouser", fields: [user1_id], references: [id])
   user_connection_user2_idTouser user      @relation("connection_user2_idTouser", fields: [user2_id], references: [id])
 
   @@index([user1_id], name: "friendship_user_id_fk")
   @@index([user2_id], name: "friendship_user_id_fk_2")
+}
+
+model post_tags {
+  post_tags_id Int    @id @default(autoincrement())
+  post_id      Int
+  tag          String @db.VarChar(255)
+  post         post   @relation(fields: [post_id], references: [id])
+
+  @@index([post_id], name: "post_tags_post_id_fk")
 }
