@@ -590,7 +590,90 @@ router.get("/:userId", auth, userController.getUser);
 
 router.get("/:userId/feed", auth, userController.getFeed);
 
+/**
+ * @swagger
+ * /user/{userId}/request-connection:
+ *  post:
+ *    tags:
+ *    - "user"
+ *    summary: Sends connection request to a user
+ *    security:
+ *    - bearerAuth: []
+ *    parameters:
+ *    - name: "userId"
+ *      in: "path"
+ *      description: "User ID of the person you want to send the connection request to"
+ *    responses:
+ *      '200':
+ *        description: A successful response, denoting that the connection request has been successfully sent
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: true
+ *            data:
+ *              type: object
+ *              properties:
+ *                message:
+ *                  type: string
+ *                  default: Connection request sent!
+ *      '400':
+ *        description: When the connection request has already been sent to that persons
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ *              default: You already sent connection request to this user!
+ */
+
 router.post("/:userId/request-connection", auth, userController.requestConnection);
-router.post("/:userId/approve-connection", auth, userController.approveConnection);
+
+/**
+ * @swagger
+ * /user/{userId}/accept-connection:
+ *  post:
+ *    tags:
+ *    - "user"
+ *    summary: Accepts a received connection request from a user
+ *    security:
+ *    - bearerAuth: []
+ *    parameters:
+ *    - name: "userId"
+ *      in: "path"
+ *      description: "User ID of the person whose connection request you want to accept"
+ *    responses:
+ *      '200':
+ *        description: A successful response, denoting that the connection request has been successfully accepted
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: true
+ *            data:
+ *              type: object
+ *              properties:
+ *                message:
+ *                  type: string
+ *                  default: You are now connected!
+ *      '400':
+ *        description: When the connection request has already been accepted
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ *              default: You have already accepted the request!
+ */
+
+router.post("/:userId/accept-connection", auth, userController.acceptConnection);
 
 export default router;
