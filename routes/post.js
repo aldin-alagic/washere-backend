@@ -68,7 +68,7 @@ router.post("/", postController.newPost);
  *  get:
  *    tags:
  *    - "post"
- *    summary: Get post information (description, comments etc.)
+ *    summary: Get posts that contain the specified tag
  *    security:
  *    - bearerAuth: []
  *    parameters:
