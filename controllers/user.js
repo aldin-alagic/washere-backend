@@ -319,6 +319,72 @@ export const getFeed = async (req, res) => {
   }
 };
 
+export const getFeedFiltered = async (req, res) => {
+  try {
+    const { number, lastPostId, filter } = req.query;
+
+    if (!filter) throw new Error(`URL parameter "filter" hasn't been provided!`);
+
+    const posts = await prisma.post.findMany({
+      take: parseInt(number),
+      ...(lastPostId && {
+        skip: 1,
+        cursor: {
+          id: parseInt(lastPostId),
+        },
+      }),
+      where: {
+        is_public: true,
+        OR: [
+          {
+            user: {
+              fullname: {
+                contains: filter,
+              },
+            },
+          },
+          {
+            description: { contains: filter },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        description: true,
+        is_public: true,
+        latitude: true,
+        longitude: true,
+        views: true,
+        created_at: true,
+        user: {
+          select: {
+            fullname: true,
+            profile_photo: true,
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+          },
+        },
+        photos: {
+          select: {
+            photo_key: true,
+          },
+        },
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+    });
+
+    res.status(200).json({ success: true, data: { posts: posts, lastPostId: posts[posts.length - 1]?.id || lastPostId } });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
 export const requestConnection = async (req, res) => {
   try {
     const { userId } = req.params;
