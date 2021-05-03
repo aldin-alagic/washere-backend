@@ -361,7 +361,7 @@ export const getProfile = async (req, res) => {
           },
         },
       });
-      return res.status(200).json({ success: true, data: { user, posts } });
+      return res.status(200).json({ success: true, data: { user, posts, connected: true } });
     }
 
     // If user is not connection, return restricted amount of information for that user
@@ -415,7 +415,7 @@ export const getProfile = async (req, res) => {
       },
     });
 
-    res.status(200).json({ success: true, data: { user, mutualConnections, requestSent: requestSent ? true : false } });
+    res.status(200).json({ success: true, data: { user, mutualConnections, requestSent: requestSent ? true : false, connected: false } });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
