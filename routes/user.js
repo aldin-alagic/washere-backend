@@ -414,11 +414,11 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
 
 /**
  * @swagger
- * /user/{userId}:
+ * /user/profile:
  *  get:
  *    tags:
  *    - "user"
- *    summary: Get all information for the given user
+ *    summary: Get profile information for the currently signed in user
  *    security:
  *    - bearerAuth: []
  *    parameters:
@@ -543,7 +543,7 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
  *              type: string
  */
 
-router.get("/:userId", auth, userController.getUser);
+router.get("/profile", auth, userController.getMyProfile);
 
 /**
  * @swagger
