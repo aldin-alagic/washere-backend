@@ -293,6 +293,7 @@ export const getProfile = async (req, res) => {
             },
           },
         ],
+        accepted: true,
       },
     });
 
@@ -391,7 +392,30 @@ export const getProfile = async (req, res) => {
     )
      `;
 
-    res.status(200).json({ success: true, data: { user, mutualConnections } });
+    const requestSent = await prisma.connection.findFirst({
+      where: {
+        OR: [
+          {
+            user1_id: {
+              equals: parseInt(userId),
+            },
+            user2_id: {
+              equals: id,
+            },
+          },
+          {
+            user2_id: {
+              equals: parseInt(userId),
+            },
+            user1_id: {
+              equals: id,
+            },
+          },
+        ],
+      },
+    });
+
+    res.status(200).json({ success: true, data: { user, mutualConnections, requestSent: requestSent ? true : false } });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
