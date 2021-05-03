@@ -196,11 +196,11 @@ export const uploadProfilePhoto = async (req, res) => {
 
 export const getMyProfile = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { id } = req.user;
 
     const user = await prisma.user.findUnique({
       where: {
-        id: parseInt(userId),
+        id: id,
       },
       select: {
         id: true,
@@ -218,7 +218,7 @@ export const getMyProfile = async (req, res) => {
 
     const posts = await prisma.post.findMany({
       where: {
-        user_id: parseInt(userId),
+        user_id: id,
       },
       select: {
         id: true,
@@ -262,6 +262,136 @@ export const getMyProfile = async (req, res) => {
     });
 
     res.status(200).json({ success: true, data: { user, posts } });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const getProfile = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { id } = req.user;
+
+    // Check if user is a connection
+    const isConnection = await prisma.connection.findFirst({
+      where: {
+        OR: [
+          {
+            user1_id: {
+              equals: parseInt(userId),
+            },
+            user2_id: {
+              equals: id,
+            },
+          },
+          {
+            user2_id: {
+              equals: parseInt(userId),
+            },
+            user1_id: {
+              equals: id,
+            },
+          },
+        ],
+      },
+    });
+
+    // If is connection, return all user's information
+    if (isConnection) {
+      // Get user information
+      const user = await prisma.user.findUnique({
+        where: {
+          id: parseInt(userId),
+        },
+        select: {
+          id: true,
+          fullname: true,
+          username: true,
+          profile_photo: true,
+          about: true,
+          contact_telegram: true,
+          contact_messenger: true,
+          contact_whatsapp: true,
+        },
+      });
+
+      // Get user's posts
+      const posts = await prisma.post.findMany({
+        where: {
+          user_id: parseInt(userId),
+        },
+        select: {
+          id: true,
+          description: true,
+          is_public: true,
+          latitude: true,
+          longitude: true,
+          views: true,
+          created_at: true,
+          user: {
+            select: {
+              fullname: true,
+              profile_photo: true,
+            },
+          },
+          _count: {
+            select: {
+              comments: true,
+              likes: true,
+            },
+          },
+          comments: {
+            select: {
+              id: true,
+              text: true,
+              created_at: true,
+              user: {
+                select: {
+                  id: true,
+                  fullname: true,
+                },
+              },
+            },
+          },
+          photos: {
+            select: {
+              photo_key: true,
+            },
+          },
+        },
+      });
+      return res.status(200).json({ success: true, data: { user, posts } });
+    }
+
+    // If user is not connection, return restricted amount of information for that user
+    const user = await prisma.user.findUnique({
+      where: {
+        id: parseInt(userId),
+      },
+      select: {
+        id: true,
+        fullname: true,
+        username: true,
+        profile_photo: true,
+        about: true,
+      },
+    });
+
+    const mutualConnections = await prisma.$queryRaw`
+    SELECT u.id, u.profile_photo FROM user u WHERE u.id IN (
+      SELECT UserAConnections.id FROM (
+        SELECT user2_id id FROM connection WHERE user1_id = ${userId} UNION 
+        SELECT user1_id id FROM connection WHERE user2_id = ${userId}
+     ) AS UserAConnections 
+     JOIN  (
+       SELECT user2_id id FROM connection WHERE user1_id = ${id} UNION 
+       SELECT user1_id id FROM connection WHERE user2_id = ${id}
+     ) AS UserBConnections 
+     ON  UserAConnections.id = UserBConnections.id JOIN user ON user.id = UserAConnections.id
+    )
+     `;
+
+    res.status(200).json({ success: true, data: { user, mutualConnections } });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
