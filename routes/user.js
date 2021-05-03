@@ -9,7 +9,7 @@ import auth from "../middleware/auth.js";
  * /user:
  *  post:
  *    tags:
- *    - "user"
+ *    - "authentication"
  *    summary: Register a new user
  *    parameters:
  *    - name: "body"
@@ -62,7 +62,7 @@ router.post("/", userController.register);
  * /user/login:
  *  post:
  *    tags:
- *    - "user"
+ *    - "authentication"
  *    summary: Login with user credentials
  *    parameters:
  *    - name: "body"
@@ -109,7 +109,7 @@ router.post("/login", userController.login);
  * /user/reset-code:
  *  post:
  *    tags:
- *    - "user"
+ *    - "authentication"
  *    summary: Request a reset code for password reset process
  *    parameters:
  *    - name: "body"
@@ -153,7 +153,7 @@ router.post("/reset-code", userController.resetCode);
  * /user/verify-reset-code:
  *  post:
  *    tags:
- *    - "user"
+ *    - "authentication"
  *    summary: Verify reset code in password reset process
  *    parameters:
  *    - name: "body"
@@ -198,7 +198,7 @@ router.post("/verify-reset-code", userController.verifyResetCode);
  * /user/reset-password:
  *  post:
  *    tags:
- *    - "user"
+ *    - "authentication"
  *    summary: Reset user's password using reset code and new password
  *    parameters:
  *    - name: "body"
@@ -301,7 +301,7 @@ router.get("/connections", auth, userController.getConnections);
  * /user/{userId}:
  *  patch:
  *    tags:
- *    - "user"
+ *    - "profile"
  *    summary: Update user profile information
  *    security:
  *    - bearerAuth: []
@@ -362,7 +362,7 @@ router.patch("/:userId", userController.updateProfile);
  * /user/{userId}/profile-photo:
  *  post:
  *    tags:
- *    - "user"
+ *    - "profile"
  *    consumes:
  *      - multipart/form-data
  *    summary: Uploads user's profile photo
@@ -417,7 +417,7 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
  * /user/profile:
  *  get:
  *    tags:
- *    - "user"
+ *    - "profile"
  *    summary: Get profile information for the currently signed in user
  *    security:
  *    - bearerAuth: []
@@ -550,7 +550,7 @@ router.get("/profile", auth, userController.getMyProfile);
  * /user/{userId}/profile:
  *  get:
  *    tags:
- *    - "user"
+ *    - "profile"
  *    summary: Get profile information for the given user
  *    security:
  *    - bearerAuth: []
@@ -683,7 +683,7 @@ router.get("/:userId/profile", auth, userController.getProfile);
  * /user/{userId}/feed:
  *  get:
  *    tags:
- *    - "user"
+ *    - "feed"
  *    summary: Get user's feed, sorted in descending order by creation date, with pagination support
  *    security:
  *    - bearerAuth: []
@@ -785,7 +785,7 @@ router.get("/:userId/feed", auth, userController.getFeed);
  * /user/{userId}/feed/filtered:
  *  get:
  *    tags:
- *    - "user"
+ *    - "feed"
  *    summary: Get user's feed, filtered by provided filter, sorted in descending order by creation date, with pagination support
  *    security:
  *    - bearerAuth: []
