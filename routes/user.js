@@ -244,7 +244,7 @@ router.post("/reset-password", userController.resetPassword);
  * /user/connections:
  *  get:
  *    tags:
- *    - "user"
+ *    - "connections"
  *    summary: Get all connections for the user that is currently signed in
  *    security:
  *    - bearerAuth: []
@@ -891,7 +891,7 @@ router.get("/:userId/feed/filtered", auth, userController.getFeedFiltered);
  * /user/{userId}/request-connection:
  *  post:
  *    tags:
- *    - "user"
+ *    - "connections"
  *    summary: Sends connection request to a user
  *    security:
  *    - bearerAuth: []
@@ -934,7 +934,7 @@ router.post("/:userId/request-connection", auth, userController.requestConnectio
  * /user/{userId}/accept-connection:
  *  post:
  *    tags:
- *    - "user"
+ *    - "connections"
  *    summary: Accepts a received connection request from a user
  *    security:
  *    - bearerAuth: []
