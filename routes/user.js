@@ -547,7 +547,7 @@ router.get("/profile", auth, userController.getMyProfile);
 
 /**
  * @swagger
- * /user/{userId}:
+ * /user/{userId}/profile:
  *  get:
  *    tags:
  *    - "user"
@@ -676,7 +676,7 @@ router.get("/profile", auth, userController.getMyProfile);
  *              type: string
  */
 
-router.get("/:userId", auth, userController.getProfile);
+router.get("/:userId/profile", auth, userController.getProfile);
 
 /**
  * @swagger
