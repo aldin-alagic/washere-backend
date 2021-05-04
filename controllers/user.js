@@ -279,18 +279,16 @@ export const getProfilePosts = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: {
-        posts: posts.map((post) => {
-          const postUsersLiked = post.likes.map((post) => post.user_id);
+      data: posts.map((post) => {
+        const postUsersLiked = post.likes.map((post) => post.user_id);
 
-          delete post.likes;
+        delete post.likes;
 
-          return {
-            ...post,
-            liked: postUsersLiked.includes(id),
-          };
-        }),
-      },
+        return {
+          ...post,
+          liked: postUsersLiked.includes(id),
+        };
+      }),
     });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
