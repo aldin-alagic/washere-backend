@@ -9,9 +9,7 @@ if (process.env.NODE_ENV === "production") {
   });
 } else {
   if (!global.prisma) {
-    global.prisma = new PrismaClient({
-      log: ["query", "info", `warn`, `error`],
-    });
+    global.prisma = new PrismaClient();
   }
   prisma = global.prisma;
 }
