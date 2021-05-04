@@ -278,7 +278,9 @@ export const toggleLike = async (req, res) => {
       });
     }
 
-    res.status(200).json({ success: true, message: "Post like status has successfully been toggled!" });
+    res
+      .status(200)
+      .json({ success: true, message: "Post like status has successfully been toggled!", data: { post_id: parseInt(postId) } });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

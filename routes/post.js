@@ -433,6 +433,12 @@ router.post("/:postId/comment", postController.addComment);
  *            message:
  *              type: string
  *              default: "Post like status has successfully been toggled!"
+ *            data:
+ *              type: object
+ *              properties:
+ *                post_id:
+ *                  type: number
+ *                  description: ID of the post that had its like status toggled
  *      '400':
  *        description: An unsuccesful response
  *        schema:

@@ -9,7 +9,7 @@ import auth from "../middleware/auth.js";
  * /user:
  *  post:
  *    tags:
- *    - "user"
+ *    - "authentication"
  *    summary: Register a new user
  *    parameters:
  *    - name: "body"
@@ -62,7 +62,7 @@ router.post("/", userController.register);
  * /user/login:
  *  post:
  *    tags:
- *    - "user"
+ *    - "authentication"
  *    summary: Login with user credentials
  *    parameters:
  *    - name: "body"
@@ -109,7 +109,7 @@ router.post("/login", userController.login);
  * /user/reset-code:
  *  post:
  *    tags:
- *    - "user"
+ *    - "authentication"
  *    summary: Request a reset code for password reset process
  *    parameters:
  *    - name: "body"
@@ -153,7 +153,7 @@ router.post("/reset-code", userController.resetCode);
  * /user/verify-reset-code:
  *  post:
  *    tags:
- *    - "user"
+ *    - "authentication"
  *    summary: Verify reset code in password reset process
  *    parameters:
  *    - name: "body"
@@ -198,7 +198,7 @@ router.post("/verify-reset-code", userController.verifyResetCode);
  * /user/reset-password:
  *  post:
  *    tags:
- *    - "user"
+ *    - "authentication"
  *    summary: Reset user's password using reset code and new password
  *    parameters:
  *    - name: "body"
@@ -244,7 +244,7 @@ router.post("/reset-password", userController.resetPassword);
  * /user/connections:
  *  get:
  *    tags:
- *    - "user"
+ *    - "connections"
  *    summary: Get all connections for the user that is currently signed in
  *    security:
  *    - bearerAuth: []
@@ -301,7 +301,7 @@ router.get("/connections", auth, userController.getConnections);
  * /user/{userId}:
  *  patch:
  *    tags:
- *    - "user"
+ *    - "profile"
  *    summary: Update user profile information
  *    security:
  *    - bearerAuth: []
@@ -362,7 +362,7 @@ router.patch("/:userId", userController.updateProfile);
  * /user/{userId}/profile-photo:
  *  post:
  *    tags:
- *    - "user"
+ *    - "profile"
  *    consumes:
  *      - multipart/form-data
  *    summary: Uploads user's profile photo
@@ -414,11 +414,11 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
 
 /**
  * @swagger
- * /user/{userId}:
+ * /user/profile:
  *  get:
  *    tags:
- *    - "user"
- *    summary: Get all information for the given user
+ *    - "profile"
+ *    summary: Get profile information for the currently signed in user
  *    security:
  *    - bearerAuth: []
  *    parameters:
@@ -543,14 +543,147 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
  *              type: string
  */
 
-router.get("/:userId", auth, userController.getUser);
+router.get("/profile", auth, userController.getMyProfile);
+
+/**
+ * @swagger
+ * /user/{userId}/profile:
+ *  get:
+ *    tags:
+ *    - "profile"
+ *    summary: Get profile information for the given user
+ *    security:
+ *    - bearerAuth: []
+ *    parameters:
+ *    - name: "userId"
+ *      in: "path"
+ *      description: "User ID"
+ *    responses:
+ *      '200':
+ *        description: A successful response, with information belonging to the specified user
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: true
+ *            data:
+ *              type: object
+ *              properties:
+ *                user:
+ *                  type: object
+ *                  properties:
+ *                    id:
+ *                      type: number
+ *                      description: ID of the user who posted the comment
+ *                    fullname:
+ *                      type: string
+ *                      description: Full name of the user who posted the comment
+ *                    profile_photo:
+ *                      type: string
+ *                      description: AWS S3 file key to the profile photo of the user who made the post
+ *                    about:
+ *                      type: string
+ *                      description: About text
+ *                    contact_telegram:
+ *                      type: string
+ *                      description: Telegram contact information
+ *                    contact_messenger:
+ *                      type: string
+ *                      description: Messenger contact information
+ *                    contact_whatsapp:
+ *                      type: string
+ *                      description: WhatsApp contact information
+ *                posts:
+ *                  type: array
+ *                  items:
+ *                    type: object
+ *                    properties:
+ *                      id:
+ *                        type: number
+ *                        description: Post ID
+ *                      description:
+ *                        type: string
+ *                        description: Post content
+ *                      is_public:
+ *                        type: boolean
+ *                        description: Whether the post is public or not
+ *                      latitude:
+ *                        type: number
+ *                        description: In format XX.XXXXXX (additional decimal digits are truncated)
+ *                      longitude:
+ *                        type: number
+ *                        description: In format (X)XX.XXXXXX (same as latitude, but longitude can have three signficant digits)
+ *                      views:
+ *                        type: number
+ *                        description: Number of users who have seen the post
+ *                      created_at:
+ *                       type: string
+ *                       format: date-time
+ *                       description: Date and time when the post was made
+ *                      comments:
+ *                        type: array
+ *                        items:
+ *                          type: object
+ *                          properties:
+ *                            id:
+ *                              type: number
+ *                              description: ID of the user who made the post
+ *                            text:
+ *                              type: string
+ *                              description: Text content of the comment
+ *                            created_at:
+ *                              type: string
+ *                              format: date-time
+ *                              description: Date and time when the comment was made
+ *                            user:
+ *                              type: object
+ *                              properties:
+ *                                id:
+ *                                  type: number
+ *                                  description: ID of the user who posted the comment
+ *                                fullname:
+ *                                  type: string
+ *                                  description: Full name of the user who posted the comment
+ *                      post_photos:
+ *                        type: array
+ *                        items:
+ *                          type: object
+ *                          properties:
+ *                            photo_key:
+ *                              type: string
+ *                              description: AWS S3 file key of the post photo
+ *      '404':
+ *        description: User with the given ID does not exist
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ *              default: "User with the given ID does not exist!"
+ *      '400':
+ *        description: An unsuccesful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ */
+
+router.get("/:userId/profile", auth, userController.getProfile);
 
 /**
  * @swagger
  * /user/{userId}/feed:
  *  get:
  *    tags:
- *    - "user"
+ *    - "feed"
  *    summary: Get user's feed, sorted in descending order by creation date, with pagination support
  *    security:
  *    - bearerAuth: []
@@ -606,6 +739,9 @@ router.get("/:userId", auth, userController.getUser);
  *                      user:
  *                         type: object
  *                         properties:
+ *                          id:
+ *                            type: number
+ *                            description: User's ID
  *                          fullname:
  *                            type: string
  *                            description: Full name of the user that made the post
@@ -621,6 +757,9 @@ router.get("/:userId", auth, userController.getUser);
  *                          likes:
  *                            type: number
  *                            description: Number of likes on the post
+ *                      liked:
+ *                        type: boolean
+ *                        description: Whether the post has been liked by the user who sent the request
  *                      photos:
  *                        type: array
  *                        items:
@@ -652,7 +791,7 @@ router.get("/:userId/feed", auth, userController.getFeed);
  * /user/{userId}/feed/filtered:
  *  get:
  *    tags:
- *    - "user"
+ *    - "feed"
  *    summary: Get user's feed, filtered by provided filter, sorted in descending order by creation date, with pagination support
  *    security:
  *    - bearerAuth: []
@@ -727,6 +866,9 @@ router.get("/:userId/feed", auth, userController.getFeed);
  *                          likes:
  *                            type: number
  *                            description: Number of likes on the post
+ *                      liked:
+ *                        type: boolean
+ *                        description: Whether the post has been liked by the user who sent the request
  *                      photos:
  *                        type: array
  *                        items:
@@ -758,7 +900,7 @@ router.get("/:userId/feed/filtered", auth, userController.getFeedFiltered);
  * /user/{userId}/request-connection:
  *  post:
  *    tags:
- *    - "user"
+ *    - "connections"
  *    summary: Sends connection request to a user
  *    security:
  *    - bearerAuth: []
@@ -801,7 +943,7 @@ router.post("/:userId/request-connection", auth, userController.requestConnectio
  * /user/{userId}/accept-connection:
  *  post:
  *    tags:
- *    - "user"
+ *    - "connections"
  *    summary: Accepts a received connection request from a user
  *    security:
  *    - bearerAuth: []
