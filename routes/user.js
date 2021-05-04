@@ -757,6 +757,9 @@ router.get("/:userId/profile", auth, userController.getProfile);
  *                          likes:
  *                            type: number
  *                            description: Number of likes on the post
+ *                      liked:
+ *                        type: boolean
+ *                        description: Whether the post has been liked by the user who sent the request
  *                      photos:
  *                        type: array
  *                        items:
@@ -863,6 +866,9 @@ router.get("/:userId/feed", auth, userController.getFeed);
  *                          likes:
  *                            type: number
  *                            description: Number of likes on the post
+ *                      liked:
+ *                        type: boolean
+ *                        description: Whether the post has been liked by the user who sent the request
  *                      photos:
  *                        type: array
  *                        items:
