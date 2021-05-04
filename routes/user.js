@@ -485,7 +485,7 @@ router.get("/profile", auth, userController.getMyProfile);
 
 /**
  * @swagger
- * /user/{userId}/posts/:
+ * /user/{userId}/posts:
  *  get:
  *    tags:
  *    - "profile"

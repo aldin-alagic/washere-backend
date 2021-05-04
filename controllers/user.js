@@ -225,6 +225,7 @@ export const getMyProfile = async (req, res) => {
 export const getProfilePosts = async (req, res) => {
   try {
     const { userId } = req.params;
+    const { id } = req.user;
 
     const posts = await prisma.post.findMany({
       where: {
@@ -263,6 +264,11 @@ export const getProfilePosts = async (req, res) => {
             },
           },
         },
+        likes: {
+          select: {
+            user_id: true,
+          },
+        },
         photos: {
           select: {
             photo_key: true,
@@ -271,7 +277,21 @@ export const getProfilePosts = async (req, res) => {
       },
     });
 
-    res.status(200).json({ success: true, data: posts });
+    res.status(200).json({
+      success: true,
+      data: {
+        posts: posts.map((post) => {
+          const postUsersLiked = post.likes.map((post) => post.user_id);
+
+          delete post.likes;
+
+          return {
+            ...post,
+            liked: postUsersLiked.includes(id),
+          };
+        }),
+      },
+    });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
