@@ -438,7 +438,7 @@ router.post("/:postId/comment", postController.addComment);
  *              properties:
  *                post_id:
  *                  type: number
- *                  description: ID of the post that has been merged
+ *                  description: ID of the post that had its like status toggled
  *      '400':
  *        description: An unsuccesful response
  *        schema:
