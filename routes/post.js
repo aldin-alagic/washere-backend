@@ -163,6 +163,9 @@ router.post("/", postController.newPost);
  *                          fullname:
  *                            type: string
  *                            description: Full name of the user who posted the comment
+ *                liked:
+ *                  type: boolean
+ *                  description: Whether the post has been liked by the user who sent the request
  *                post_photos:
  *                  type: array
  *                  items:
@@ -296,6 +299,9 @@ router.get("/by-tag", postController.getPostsByTag);
  *                          fullname:
  *                            type: string
  *                            description: Full name of the user who posted the comment
+ *                liked:
+ *                  type: boolean
+ *                  description: Whether the post has been liked by the user who sent the request
  *                post_photos:
  *                  type: array
  *                  items:

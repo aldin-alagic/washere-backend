@@ -66,8 +66,9 @@ export const newPost = async (req, res) => {
 export const getPost = async (req, res) => {
   try {
     const { postId } = req.params;
+    const { id } = req.user;
 
-    const post = await prisma.post.findUnique({
+    let post = await prisma.post.findUnique({
       where: {
         id: parseInt(postId),
       },
@@ -105,6 +106,11 @@ export const getPost = async (req, res) => {
             likes: true,
           },
         },
+        likes: {
+          select: {
+            user_id: true,
+          },
+        },
         photos: {
           select: {
             photo_key: true,
@@ -120,6 +126,15 @@ export const getPost = async (req, res) => {
 
     if (!post) return res.status(404).json({ success: false, message: "Post with the given ID does not exist!" });
 
+    const postUsersLiked = post.likes.map((post) => post.user_id);
+    delete post.likes;
+    post = { ...post, liked: postUsersLiked.includes(id) };
+
+    res.status(200).json({
+      success: true,
+      data: post,
+    });
+
     res.status(200).json({ success: true, data: post });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
@@ -129,6 +144,7 @@ export const getPost = async (req, res) => {
 export const getPostsByTag = async (req, res) => {
   try {
     const { number, lastPostId, query } = req.query;
+    const { id } = req.user;
 
     const posts = await prisma.post.findMany({
       take: parseInt(number),
@@ -165,6 +181,11 @@ export const getPostsByTag = async (req, res) => {
             likes: true,
           },
         },
+        likes: {
+          select: {
+            user_id: true,
+          },
+        },
         comments: {
           select: {
             id: true,
@@ -196,7 +217,22 @@ export const getPostsByTag = async (req, res) => {
 
     if (!posts) return res.status(404).json({ success: false, message: "No posts match the given search query!" });
 
-    res.status(200).json({ success: true, data: { posts: posts, lastPostId: posts[posts.length - 1]?.id || lastPostId } });
+    res.status(200).json({
+      success: true,
+      data: {
+        posts: posts.map((post) => {
+          const postUsersLiked = post.likes.map((post) => post.user_id);
+
+          delete post.likes;
+
+          return {
+            ...post,
+            liked: postUsersLiked.includes(id),
+          };
+        }),
+        lastPostId: posts[posts.length - 1]?.id || lastPostId,
+      },
+    });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
