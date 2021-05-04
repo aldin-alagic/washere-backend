@@ -297,6 +297,21 @@ export const getProfile = async (req, res) => {
       },
     });
 
+    // Get mutual connections
+    const mutualConnections = await prisma.$queryRaw`
+    SELECT u.id, u.profile_photo FROM user u WHERE u.id IN (
+      SELECT UserAConnections.id FROM (
+        SELECT user2_id id FROM connection WHERE user1_id = ${userId} UNION 
+        SELECT user1_id id FROM connection WHERE user2_id = ${userId}
+     ) AS UserAConnections 
+     JOIN  (
+       SELECT user2_id id FROM connection WHERE user1_id = ${id} UNION 
+       SELECT user1_id id FROM connection WHERE user2_id = ${id}
+     ) AS UserBConnections 
+     ON  UserAConnections.id = UserBConnections.id JOIN user ON user.id = UserAConnections.id
+    )
+     `;
+
     // If is connection, return all user's information
     if (isConnection) {
       // Get user information
@@ -361,7 +376,7 @@ export const getProfile = async (req, res) => {
           },
         },
       });
-      return res.status(200).json({ success: true, data: { user, posts, connected: true } });
+      return res.status(200).json({ success: true, data: { user, mutualConnections, posts, connected: true } });
     }
 
     // If user is not connection, return restricted amount of information for that user
@@ -377,20 +392,6 @@ export const getProfile = async (req, res) => {
         about: true,
       },
     });
-
-    const mutualConnections = await prisma.$queryRaw`
-    SELECT u.id, u.profile_photo FROM user u WHERE u.id IN (
-      SELECT UserAConnections.id FROM (
-        SELECT user2_id id FROM connection WHERE user1_id = ${userId} UNION 
-        SELECT user1_id id FROM connection WHERE user2_id = ${userId}
-     ) AS UserAConnections 
-     JOIN  (
-       SELECT user2_id id FROM connection WHERE user1_id = ${id} UNION 
-       SELECT user1_id id FROM connection WHERE user2_id = ${id}
-     ) AS UserBConnections 
-     ON  UserAConnections.id = UserBConnections.id JOIN user ON user.id = UserAConnections.id
-    )
-     `;
 
     const requestSent = await prisma.connection.findFirst({
       where: {
