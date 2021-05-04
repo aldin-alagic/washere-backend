@@ -447,6 +447,7 @@ export const getFeed = async (req, res) => {
         created_at: true,
         user: {
           select: {
+            id: true,
             fullname: true,
             profile_photo: true,
           },

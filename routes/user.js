@@ -739,6 +739,9 @@ router.get("/:userId/profile", auth, userController.getProfile);
  *                      user:
  *                         type: object
  *                         properties:
+ *                          id:
+ *                            type: number
+ *                            description: User's ID
  *                          fullname:
  *                            type: string
  *                            description: Full name of the user that made the post
