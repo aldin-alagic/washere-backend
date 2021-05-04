@@ -216,9 +216,19 @@ export const getMyProfile = async (req, res) => {
 
     if (!user) return res.status(404).json({ success: false, message: "User with the given ID does not exist!" });
 
+    res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const getProfilePosts = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
     const posts = await prisma.post.findMany({
       where: {
-        user_id: id,
+        user_id: parseInt(userId),
       },
       select: {
         id: true,
@@ -261,7 +271,7 @@ export const getMyProfile = async (req, res) => {
       },
     });
 
-    res.status(200).json({ success: true, data: { user, posts } });
+    res.status(200).json({ success: true, data: posts });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

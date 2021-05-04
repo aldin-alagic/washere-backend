@@ -437,89 +437,27 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
  *            data:
  *              type: object
  *              properties:
- *                user:
- *                  type: object
- *                  properties:
- *                    id:
- *                      type: number
- *                      description: ID of the user who posted the comment
- *                    fullname:
- *                      type: string
- *                      description: Full name of the user who posted the comment
- *                    profile_photo:
- *                      type: string
- *                      description: AWS S3 file key to the profile photo of the user who made the post
- *                    about:
- *                      type: string
- *                      description: About text
- *                    contact_telegram:
- *                      type: string
- *                      description: Telegram contact information
- *                    contact_messenger:
- *                      type: string
- *                      description: Messenger contact information
- *                    contact_whatsapp:
- *                      type: string
- *                      description: WhatsApp contact information
- *                posts:
- *                  type: array
- *                  items:
- *                    type: object
- *                    properties:
- *                      id:
- *                        type: number
- *                        description: Post ID
- *                      description:
- *                        type: string
- *                        description: Post content
- *                      is_public:
- *                        type: boolean
- *                        description: Whether the post is public or not
- *                      latitude:
- *                        type: number
- *                        description: In format XX.XXXXXX (additional decimal digits are truncated)
- *                      longitude:
- *                        type: number
- *                        description: In format (X)XX.XXXXXX (same as latitude, but longitude can have three signficant digits)
- *                      views:
- *                        type: number
- *                        description: Number of users who have seen the post
- *                      created_at:
- *                       type: string
- *                       format: date-time
- *                       description: Date and time when the post was made
- *                      comments:
- *                        type: array
- *                        items:
- *                          type: object
- *                          properties:
- *                            id:
- *                              type: number
- *                              description: ID of the user who made the post
- *                            text:
- *                              type: string
- *                              description: Text content of the comment
- *                            created_at:
- *                              type: string
- *                              format: date-time
- *                              description: Date and time when the comment was made
- *                            user:
- *                              type: object
- *                              properties:
- *                                id:
- *                                  type: number
- *                                  description: ID of the user who posted the comment
- *                                fullname:
- *                                  type: string
- *                                  description: Full name of the user who posted the comment
- *                      post_photos:
- *                        type: array
- *                        items:
- *                          type: object
- *                          properties:
- *                            photo_key:
- *                              type: string
- *                              description: AWS S3 file key of the post photo
+ *                id:
+ *                  type: number
+ *                  description: ID of the user who posted the comment
+ *                fullname:
+ *                  type: string
+ *                  description: Full name of the user who posted the comment
+ *                profile_photo:
+ *                  type: string
+ *                  description: AWS S3 file key to the profile photo of the user who made the post
+ *                about:
+ *                  type: string
+ *                  description: About text
+ *                contact_telegram:
+ *                  type: string
+ *                  description: Telegram contact information
+ *                contact_messenger:
+ *                  type: string
+ *                  description: Messenger contact information
+ *                contact_whatsapp:
+ *                  type: string
+ *                  description: WhatsApp contact information
  *      '404':
  *        description: User with the given ID does not exist
  *        schema:
@@ -544,6 +482,145 @@ router.post("/:userId/profile-photo", userController.uploadProfilePhoto);
  */
 
 router.get("/profile", auth, userController.getMyProfile);
+
+/**
+ * @swagger
+ * /user/{userId}/posts/:
+ *  get:
+ *    tags:
+ *    - "profile"
+ *    summary: Get posts for the user that matches a given user ID
+ *    security:
+ *    - bearerAuth: []
+ *    parameters:
+ *    - name: "userId"
+ *      in: "query"
+ *      required: true
+ *      description: User ID to search for
+ *    responses:
+ *      '200':
+ *        description: A successful response, with an array of posts that belong to the user matching the specified ID
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: true
+ *            data:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  id:
+ *                    type: number
+ *                    description: Post ID
+ *                  description:
+ *                    type: string
+ *                    description: Post content
+ *                  is_public:
+ *                    type: boolean
+ *                    description: Whether the post is public or not
+ *                  latitude:
+ *                    type: number
+ *                    description: In format XX.XXXXXX (additional decimal digits are truncated)
+ *                  longitude:
+ *                    type: number
+ *                    description: In format (X)XX.XXXXXX (same as latitude, but longitude can have three signficant digits)
+ *                  views:
+ *                    type: number
+ *                    description: Number of users who have seen the post
+ *                  created_at:
+ *                    type: string
+ *                    format: date-time
+ *                    description: Date and time when the post was made
+ *                  user:
+ *                    type: object
+ *                    properties:
+ *                      id:
+ *                        type: number
+ *                        description: ID of the user who made the post
+ *                      fullname:
+ *                        type: string
+ *                        description: Full name of the user who made the post
+ *                      profile_photo:
+ *                        type: string
+ *                        description: AWS S3 key to the profile photo of the user who made the post
+ *                  _count:
+ *                     type: object
+ *                     properties:
+ *                      comments:
+ *                        type: number
+ *                        description: Number of comments on the post
+ *                      likes:
+ *                        type: number
+ *                        description: Number of likes on the post
+ *                  comments:
+ *                    type: array
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        id:
+ *                          type: number
+ *                          description: ID of the user who made the post
+ *                        text:
+ *                          type: string
+ *                          description: Full name of the user who made the post
+ *                        created_at:
+ *                          type: string
+ *                          format: date-time
+ *                          description: Date and time when the comment was made
+ *                        user:
+ *                          type: object
+ *                          properties:
+ *                            id:
+ *                              type: number
+ *                              description: ID of the user who posted the comment
+ *                            fullname:
+ *                              type: string
+ *                              description: Full name of the user who posted the comment
+ *                  liked:
+ *                    type: boolean
+ *                    description: Whether the post has been liked by the user who sent the request
+ *                  post_photos:
+ *                    type: array
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        photo_key:
+ *                          type: string
+ *                          description: AWS S3 key of the post photo
+ *                  post_tags:
+ *                    type: array
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        tag:
+ *                          type: string
+ *                          description: Tag used in the post
+ *      '404':
+ *        description: No posts match the given search query
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ *              default: "No posts match the given search query!"
+ *      '400':
+ *        description: An unsuccesful response
+ *        schema:
+ *          type: object
+ *          properties:
+ *            success:
+ *              type: boolean
+ *              default: false
+ *            message:
+ *              type: string
+ */
+
+router.get("/:userId/posts", auth, userController.getProfilePosts);
 
 /**
  * @swagger
@@ -585,15 +662,6 @@ router.get("/profile", auth, userController.getMyProfile);
  *                    about:
  *                      type: string
  *                      description: About text
- *                    contact_telegram:
- *                      type: string
- *                      description: Telegram contact information
- *                    contact_messenger:
- *                      type: string
- *                      description: Messenger contact information
- *                    contact_whatsapp:
- *                      type: string
- *                      description: WhatsApp contact information
  *                posts:
  *                  type: array
  *                  items:
