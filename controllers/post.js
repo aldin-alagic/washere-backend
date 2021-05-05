@@ -130,11 +130,6 @@ export const getPost = async (req, res) => {
     delete post.likes;
     post = { ...post, liked: postUsersLiked.includes(id) };
 
-    res.status(200).json({
-      success: true,
-      data: post,
-    });
-
     res.status(200).json({ success: true, data: post });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
