@@ -7,12 +7,23 @@ export const updateProfile = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    await prisma.user.update({
+    const { id, fullname, email, profile_photo, about, contact_telegram, contact_messenger, contact_whatsapp } = await prisma.user.update({
       where: { id: parseInt(userId) },
       data: { ...req.body },
     });
 
-    res.status(200).json({ success: true, message: "Your information has been updated!" });
+    const data = {
+      id,
+      fullname,
+      email,
+      profile_photo,
+      about,
+      contact_telegram,
+      contact_messenger,
+      contact_whatsapp,
+    };
+
+    res.status(200).json({ success: true, message: "Your information has been updated!", data });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

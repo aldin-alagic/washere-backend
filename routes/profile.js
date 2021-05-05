@@ -49,6 +49,33 @@ import * as profileController from "../controllers/profile.js";
  *            message:
  *              type: string
  *              default: Your information has been updated!
+ *            data:
+ *              type: object
+ *              properties:
+ *                id:
+ *                  type: number
+ *                  description: ID of the user
+ *                fullname:
+ *                  type: string
+ *                  description: User's full name
+ *                email:
+ *                  type: string
+ *                  description: User's email address
+ *                profile_photo:
+ *                  type: string
+ *                  description: AWS S3 file key to the profile photo of the user who made the post
+ *                about:
+ *                  type: string
+ *                  description: About text
+ *                contact_telegram:
+ *                  type: string
+ *                  description: Telegram contact information
+ *                contact_messenger:
+ *                  type: string
+ *                  description: Messenger contact information
+ *                contact_whatsapp:
+ *                  type: string
+ *                  description: WhatsApp contact information
  *      '400':
  *        description: An unsuccesful response
  *        schema:
