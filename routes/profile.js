@@ -146,10 +146,10 @@ router.post("/:userId/profile-photo", profileController.uploadProfilePhoto);
  *              properties:
  *                id:
  *                  type: number
- *                  description: ID of the user who posted the comment
+ *                  description: ID of the user
  *                fullname:
  *                  type: string
- *                  description: Full name of the user who posted the comment
+ *                  description: User's full name
  *                email:
  *                  type: string
  *                  description: User's email address
