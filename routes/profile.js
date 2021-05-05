@@ -150,6 +150,9 @@ router.post("/:userId/profile-photo", profileController.uploadProfilePhoto);
  *                fullname:
  *                  type: string
  *                  description: Full name of the user who posted the comment
+ *                email:
+ *                  type: string
+ *                  description: User's email address
  *                profile_photo:
  *                  type: string
  *                  description: AWS S3 file key to the profile photo of the user who made the post

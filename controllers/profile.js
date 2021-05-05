@@ -65,6 +65,7 @@ export const getMyProfile = async (req, res) => {
         id: true,
         fullname: true,
         username: true,
+        email: true,
         profile_photo: true,
         about: true,
         contact_telegram: true,
