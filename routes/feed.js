@@ -202,7 +202,6 @@ router.get("/:userId/feed", auth, feedController.getFeed);
  *                            photo_key:
  *                              type: string
  *                              description: AWS S3 key of the post photo
-
  *                lastPostId:
  *                  type: number
  *                  description: ID of the last post that was fetched
