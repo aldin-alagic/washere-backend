@@ -7,7 +7,17 @@ export const updateProfile = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    const { id, fullname, email, profile_photo, about, contact_telegram, contact_messenger, contact_whatsapp } = await prisma.user.update({
+    const {
+      id,
+      fullname,
+      username,
+      email,
+      profile_photo,
+      about,
+      contact_telegram,
+      contact_messenger,
+      contact_whatsapp,
+    } = await prisma.user.update({
       where: { id: parseInt(userId) },
       data: { ...req.body },
     });
@@ -16,6 +26,7 @@ export const updateProfile = async (req, res) => {
       id,
       fullname,
       email,
+      username,
       profile_photo,
       about,
       contact_telegram,
