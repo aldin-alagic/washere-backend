@@ -6,8 +6,10 @@ import s3 from "../config/s3.js";
 export const newPost = async (req, res) => {
   try {
     const { description, is_public, latitude, longitude, photos } = req.body;
-    const hashtags = description.match(/#\S+/g) || [];
     const user = req.user;
+
+    // Get entered hashtags from the post description
+    const hashtags = description.match(/#\S+/g) || [];
 
     // Store the post in the database
     const post = await prisma.post.create({
