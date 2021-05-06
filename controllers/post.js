@@ -1,7 +1,8 @@
-import prisma from "../prisma/client.js";
 import { nanoid } from "nanoid";
 
+import prisma from "../prisma/client.js";
 import s3 from "../config/s3.js";
+import sendPost from "../websocket/sendPost.js";
 
 export const newPost = async (req, res) => {
   try {
@@ -58,6 +59,9 @@ export const newPost = async (req, res) => {
         },
       },
     });
+
+    // Send post to other users
+    sendPost(post.id);
 
     res.status(200).json({ success: true, message: "Post successfully created!" });
   } catch (error) {

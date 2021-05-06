@@ -1,11 +1,13 @@
 import prisma from "../prisma/client.js";
 import dayjs from "dayjs";
 
-// Fetches all posts which location is within a region on the map
-// which are made within the given time frame
+// Fetches all posts which location is within a region on the map which are made within the given time frame
 
 export default async (data, socket) => {
-  // Query database for posts
+  // Store the region the client is viewing on the map
+  socket.data = data;
+
+  // Query database for posts in that region
   const posts = await prisma.post.findMany({
     where: {
       is_public: true,
