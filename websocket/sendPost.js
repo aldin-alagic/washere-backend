@@ -17,6 +17,14 @@ export default async (postId) => {
     },
   });
 
-  // Send the new post
-  socket.emit("new post", post);
+  // Send the new post to the users that are viewing that region on the map
+  const sockets = await socket.fetchSockets();
+  for (const socket of sockets) {
+    const { locationFrom, locationTo } = socket.data;
+
+    if (!(post.longitude >= locationTo.longitude && post.longitude <= locationFrom.longitude)) continue;
+    if (!(post.latitude >= locationFrom.latitude && post.latitude <= locationTo.latitude)) continue;
+
+    socket.emit("new post", post);
+  }
 };
