@@ -107,19 +107,14 @@ export const getConnections = async (req, res) => {
     const data = connections.map((connection) => {
       if (connection.user1.id == id) {
         connection.user = connection.user2;
-
-        delete connection.user1;
-        delete connection.user2;
-
-        return connection;
       } else {
         connection.user = connection.user1;
-
-        delete connection.user2;
-        delete connection.user1;
-
-        return connection;
       }
+
+      delete connection.user2;
+      delete connection.user1;
+
+      return connection;
     });
 
     res.status(200).json({ success: true, data });
