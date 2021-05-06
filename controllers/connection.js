@@ -55,7 +55,7 @@ export const acceptConnection = async (req, res) => {
       },
       data: {
         accepted: true,
-        accepted_at: new Date(),
+        accepted_at: Date.now(),
       },
     });
 
