@@ -69,50 +69,60 @@ export const getConnections = async (req, res) => {
   try {
     const { id } = req.user;
 
-    const data = await prisma.user.findUnique({
+    const connections = await prisma.connection.findMany({
       where: {
-        id,
+        accepted: true,
+        OR: [
+          {
+            user1_id: id,
+          },
+          {
+            user2_id: id,
+          },
+        ],
       },
       select: {
-        connections1: {
+        id: true,
+        created_at: true,
+        accepted_at: true,
+        user2: {
           select: {
             id: true,
-            created_at: true,
-            accepted_at: true,
-            user2: {
-              select: {
-                id: true,
-                fullname: true,
-                username: true,
-                profile_photo: true,
-              },
-            },
+            fullname: true,
+            username: true,
+            profile_photo: true,
           },
         },
-        connections2: {
+        user1: {
           select: {
             id: true,
-            created_at: true,
-            accepted_at: true,
-            user1: {
-              select: {
-                id: true,
-                fullname: true,
-                username: true,
-                profile_photo: true,
-              },
-            },
+            fullname: true,
+            username: true,
+            profile_photo: true,
           },
         },
       },
     });
 
-    // Format the response to make it prettier
-    const connections = data.connections1
-      .map((c) => ({ ...c, user: c.user2, user2: undefined }))
-      .concat(data.connections2.map((c) => ({ ...c, user: c.user1, user1: undefined })));
+    const data = connections.map((connection) => {
+      if (connection.user1.id == id) {
+        connection.user = connection.user2;
 
-    res.status(200).json({ success: true, data: connections });
+        delete connection.user1;
+        delete connection.user2;
+
+        return connection;
+      } else {
+        connection.user = connection.user1;
+
+        delete connection.user2;
+        delete connection.user1;
+
+        return connection;
+      }
+    });
+
+    res.status(200).json({ success: true, data });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

@@ -106,7 +106,7 @@ router.post("/:userId/accept-connection", connectionController.acceptConnection)
  *  get:
  *    tags:
  *    - "connections"
- *    summary: Get all connections for the user that is currently signed in
+ *    summary: Get all (accepted) connections for the user that is currently signed in
  *    security:
  *    - bearerAuth: []
  *    responses:
