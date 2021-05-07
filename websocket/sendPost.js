@@ -22,8 +22,8 @@ export default async (postId) => {
   for (const socket of sockets) {
     const { locationFrom, locationTo } = socket.data;
 
-    if (!(post.longitude >= locationTo.longitude && post.longitude <= locationFrom.longitude)) continue;
-    if (!(post.latitude >= locationFrom.latitude && post.latitude <= locationTo.latitude)) continue;
+    // if (!(post.longitude >= locationTo.longitude && post.longitude <= locationFrom.longitude)) continue;
+    // if (!(post.latitude >= locationFrom.latitude && post.latitude <= locationTo.latitude)) continue;
 
     socket.emit("new post", post);
   }
