@@ -177,6 +177,9 @@ router.post("/:userId/profile-photo", profileController.uploadProfilePhoto);
  *                fullname:
  *                  type: string
  *                  description: User's full name
+ *                username:
+ *                  type: string
+ *                  description: User's username
  *                email:
  *                  type: string
  *                  description: User's email address
@@ -389,75 +392,45 @@ router.get("/:userId/posts", profileController.getProfilePosts);
  *                  properties:
  *                    id:
  *                      type: number
- *                      description: ID of the user who posted the comment
+ *                      description: ID of the user profile
  *                    fullname:
  *                      type: string
- *                      description: Full name of the user who posted the comment
+ *                      description: Full name of the user
+ *                    username:
+ *                      type: string
+ *                      description: Username of the user
  *                    profile_photo:
  *                      type: string
- *                      description: AWS S3 file key to the profile photo of the user who made the post
+ *                      description: AWS S3 file key to the user's profile photo
  *                    about:
  *                      type: string
  *                      description: About text
- *                posts:
+ *                    contact_telegram:
+ *                      type: "string"
+ *                      description: Contact number for Telegram (shown if user is a connection)
+ *                    contact_messenger:
+ *                      type: "string"
+ *                      description: Contact number for Facebook Messenger (shown if user is a connection)
+ *                    contact_whatsapp:
+ *                      type: "string"
+ *                      description: Contact number for WhatsApp (shown if user is a connection)
+ *                mutualConnections:
  *                  type: array
  *                  items:
  *                    type: object
  *                    properties:
  *                      id:
  *                        type: number
- *                        description: Post ID
- *                      description:
+ *                        description: ID of the user connection
+ *                      profile_photo:
  *                        type: string
- *                        description: Post content
- *                      is_public:
- *                        type: boolean
- *                        description: Whether the post is public or not
- *                      latitude:
- *                        type: number
- *                        description: In format XX.XXXXXX (additional decimal digits are truncated)
- *                      longitude:
- *                        type: number
- *                        description: In format (X)XX.XXXXXX (same as latitude, but longitude can have three signficant digits)
- *                      views:
- *                        type: number
- *                        description: Number of users who have seen the post
- *                      created_at:
- *                       type: string
- *                       format: date-time
- *                       description: Date and time when the post was made
- *                      comments:
- *                        type: array
- *                        items:
- *                          type: object
- *                          properties:
- *                            id:
- *                              type: number
- *                              description: ID of the user who made the post
- *                            text:
- *                              type: string
- *                              description: Text content of the comment
- *                            created_at:
- *                              type: string
- *                              format: date-time
- *                              description: Date and time when the comment was made
- *                            user:
- *                              type: object
- *                              properties:
- *                                id:
- *                                  type: number
- *                                  description: ID of the user who posted the comment
- *                                fullname:
- *                                  type: string
- *                                  description: Full name of the user who posted the comment
- *                      post_photos:
- *                        type: array
- *                        items:
- *                          type: object
- *                          properties:
- *                            photo_key:
- *                              type: string
- *                              description: AWS S3 file key of the post photo
+ *                        description: AWS S3 file key to the user's profile photo
+ *                requestSent:
+ *                  type: boolean
+ *                  description: Indicates whether connection request to this user has been already sent or not
+ *                connected:
+ *                  type: boolean
+ *                  description: Indicates whether user is connected to this user or not
  *      '404':
  *        description: User with the given ID does not exist
  *        schema:
