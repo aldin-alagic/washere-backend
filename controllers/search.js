@@ -4,6 +4,8 @@ export const searchPeople = async (req, res) => {
   try {
     const { query } = req.body;
 
+    if (!query) return res.status(200).json({ success: true, data: [] });
+
     const people = await prisma.user.findMany({
       where: {
         OR: [
@@ -38,6 +40,8 @@ export const searchPeople = async (req, res) => {
 export const searchTags = async (req, res) => {
   try {
     const { query } = req.body;
+
+    if (!query) return res.status(200).json({ success: true, data: { tags: [] } });
 
     const tags = await prisma.post_tags.findMany({
       where: {

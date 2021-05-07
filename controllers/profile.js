@@ -157,6 +157,9 @@ export const getProfilePosts = async (req, res) => {
           },
         },
       },
+      orderBy: {
+        created_at: "desc",
+      },
     });
 
     res.status(200).json({
